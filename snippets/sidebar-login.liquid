@@ -1,0 +1,111 @@
+{% assign login_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+  .sidebar-login-{{ login_id }} {
+    display: block;
+    width: 100%;
+    border: 1px solid {{ block.settings.border_color }};
+    background: {{ block.settings.bg_color }};
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+  .sidebar-login-{{ login_id }}__heading {
+    width: 100%;
+    line-height: 40px;
+    background: {{ block.settings.header_bg }};
+    color: {{ block.settings.header_text }};
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .sidebar-login-{{ login_id }}__body {
+    padding: 16px;
+  }
+  .sidebar-login-{{ login_id }} label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .sidebar-login-{{ login_id }} input[type="text"],
+  .sidebar-login-{{ login_id }} input[type="password"] {
+    display: block;
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 14px;
+    font-size: 13px;
+    box-sizing: border-box;
+  }
+  .sidebar-login-{{ login_id }}__buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .sidebar-login-{{ login_id }}__btn-login,
+  .sidebar-login-{{ login_id }}__btn-reset {
+    flex: 1;
+    padding: 8px;
+    font-family: 'ChiKareGo2';
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .sidebar-login-{{ login_id }}__btn-login {
+    background: {{ block.settings.login_btn_bg }};
+    color: {{ block.settings.login_btn_text }};
+    border: none;
+  }
+  .sidebar-login-{{ login_id }}__btn-reset {
+    background: {{ block.settings.reset_btn_bg }};
+    color: {{ block.settings.reset_btn_text }};
+    border: none;
+  }
+  .sidebar-login-{{ login_id }}__links {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .sidebar-login-{{ login_id }}__links a {
+    font-size: 12px;
+    color: {{ block.settings.link_color }};
+    text-decoration: none;
+  }
+  .sidebar-login-{{ login_id }}__links a:hover {
+    text-decoration: underline;
+  }
+{% endstyle %}
+
+<div class="sidebar-login-{{ login_id }}" {{ block.shopify_attributes }}>
+  <h3 class="sidebar-login-{{ login_id }}__heading">{{ block.settings.heading | escape }}</h3>
+  <div class="sidebar-login-{{ login_id }}__body">
+    {%- if customer -%}
+      <p style="font-size:13px;">Welcome, <strong>{{ customer.first_name }}</strong>!</p>
+      <a href="{{ routes.account_url }}" style="font-size:12px; display:block; margin-bottom:8px;">» My Account</a>
+      <a href= "{{ routes.account_logout_url }}" style="font-size:12px;">» Logout</a>
+    {%- else -%}
+      <form method="post" action="{{ routes.account_login_url }}">
+        <input type="hidden" name="form_type" value="customer_login">
+        <input type="hidden" name="utf8" value="✓">
+        <label for="sidebar-email-{{ login_id }}">Username :</label>
+        <input type="text" id="sidebar-email-{{ login_id }}" name="customer[email]" autocomplete="email">
+        <label for="sidebar-password-{{ login_id }}">Password :</label>
+        <input type="password" id="sidebar-password-{{ login_id }}" name="customer[password]" autocomplete="current-password">
+        <div class="sidebar-login-{{ login_id }}__buttons">
+          <button type="submit" class="sidebar-login-{{ login_id }}__btn-login">LOGIN</button>
+          <button type="reset" class="sidebar-login-{{ login_id }}__btn-reset">RESET</button>
+        </div>
+      </form>
+      <div class="sidebar-login-{{ login_id }}__links">
+        <a href="{{ routes.account_register_url }}">» {{ block.settings.register_label }}</a>
+        <a href="{{ routes.account_login_url }}">» {{ block.settings.forgot_label }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>

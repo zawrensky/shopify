@@ -1,0 +1,151 @@
+{% doc %}
+  @prompt
+    Create a flexible numbered columns content block with: 1) A small navy header bar at the top with editable title text (e.g. " WHAT MOVES US "), 2) A navy background container with dynamic columns rendered via a Liquid for loop (up to 6 columns), 3) Each column has: a numbered label auto-generated (01, 02, 03...) followed by an editable column title (e.g. "/ THE RIDE"), and an editable short paragraph description below it. Only render columns where the title is not blank (conditional rendering). All text in white on navy background. Settings: header background color, header text color, container background color, text color, number of columns to show (range 2-6), column title 1-6 and description 1-6 editable individually, font size for column titles, padding. Responsive: 2 columns on tablet, single column on mobile.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-numbered-columns-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    color: {{ block.settings.text_color }};
+    border: 1px #8588B0 solid;
+  }
+
+  .ai-numbered-columns-{{ ai_gen_id }}__header {
+    padding: 10px 16px;
+    background: {{ block.settings.header_background }};
+    color: {{ block.settings.header_text_color }};
+    font-family: 'ChiKareGo2';
+    font-weight: 500;
+    font-size: 24px;
+    letter-spacing: 0;
+  }
+
+  .ai-numbered-columns-{{ ai_gen_id }}__panel {
+    background: {{ block.settings.container_background }};
+    color: {{ block.settings.text_color }};
+    padding: {{ block.settings.padding }}px;
+  }
+
+  .ai-numbered-columns-{{ ai_gen_id }}__grid {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns_to_show }}, minmax(0, 1fr));
+    gap: 30px 32px;
+  }
+
+  .ai-numbered-columns-{{ ai_gen_id }}__item {
+    min-width: 0;
+  }
+
+  .ai-numbered-columns-{{ ai_gen_id }}__title {
+    margin: 0 0 12px;
+    color: {{ block.settings.title_color }};
+    font-size: {{ block.settings.title_size }}px;
+    line-height: 1.25;
+    font-weight: 700;
+  }
+
+  .ai-numbered-columns-{{ ai_gen_id }}__number {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: {{ block.settings.title_size }}px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ai-numbered-columns-{{ ai_gen_id }}__description {
+    margin: 0;
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }};
+    line-height: 1.65;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-numbered-columns-{{ ai_gen_id }}__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-numbered-columns-{{ ai_gen_id }}__panel {
+      padding: {{ block.settings.padding | times: 0.7 | round }}px;
+    }
+
+    .ai-numbered-columns-{{ ai_gen_id }}__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-numbered-columns-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.header_title != blank %}
+    <div class="ai-numbered-columns-{{ ai_gen_id }}__header">{{ block.settings.header_title | escape }}</div>
+  {% endif %}
+  <div class="ai-numbered-columns-{{ ai_gen_id }}__panel">
+    <div class="ai-numbered-columns-{{ ai_gen_id }}__grid">
+      {% for i in (1..6) %}
+        {% if i <= block.settings.columns_to_show %}
+          {% assign title_key = 'column_title_' | append: i %}
+          {% assign description_key = 'column_description_' | append: i %}
+          {% assign column_title = block.settings[title_key] %}
+          {% assign column_description = block.settings[description_key] %}
+          {% if column_title != blank %}
+            <article class="ai-numbered-columns-{{ ai_gen_id }}__item">
+              <h3 class="ai-numbered-columns-{{ ai_gen_id }}__title">
+                <span class="ai-numbered-columns-{{ ai_gen_id }}__number">{% if i < 10 %}0{% endif %}{{ i }}</span>{{ column_title | escape }}
+              </h3>
+              {% if column_description != blank %}
+                <p class="ai-numbered-columns-{{ ai_gen_id }}__description">{{ column_description | escape | newline_to_br }}</p>
+              {% endif %}
+            </article>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Numbered columns",
+  "settings": [
+    { "type": "text", "id": "header_title", "label": "Header title", "default": "WHAT MOVES US" },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "columns_to_show", "label": "Number of columns", "min": 2, "max": 6, "step": 1, "default": 3 },
+    { "type": "color", "id": "header_background", "label": "Header background", "default": "#071B36" },
+    { "type": "color", "id": "header_text_color", "label": "Header text", "default": "#FFFFFF" },
+    { "type": "color", "id": "container_background", "label": "Container background", "default": "#FFFFFF" },
+    { "type": "color", "id": "text_color", "label": "Text Color", "default": "#151515" },
+    { "type": "range", "id": "text_size", "label": "Text size", "min": 12, "max": 32, "step": 2, "unit": "px", "default": 16 },
+    { "type": "color", "id": "title_color", "label": "Title Color", "default": "#06149B" },
+    { "type": "range", "id": "title_size", "label": "Column title size", "min": 14, "max": 32, "step": 2, "unit": "px", "default": 30 },
+    { "type": "range", "id": "padding", "label": "Padding", "min": 12, "max": 64, "step": 2, "unit": "px", "default": 22 },
+    { "type": "header", "content": "Column 1" },
+    { "type": "text", "id": "column_title_1", "label": "Title", "default": "/ THE RIDE" },
+    { "type": "textarea", "id": "column_description_1", "label": "Description", "default": "Every ride is a chance to push further and find your rhythm." },
+    { "type": "header", "content": "Column 2" },
+    { "type": "text", "id": "column_title_2", "label": "Title", "default": "/ THE COMMUNITY" },
+    { "type": "textarea", "id": "column_description_2", "label": "Description", "default": "We move better together, sharing the road and the experience." },
+    { "type": "header", "content": "Column 3" },
+    { "type": "text", "id": "column_title_3", "label": "Title", "default": "/ THE CRAFT" },
+    { "type": "textarea", "id": "column_description_3", "label": "Description", "default": "Purposeful design and reliable performance for every journey." },
+    { "type": "header", "content": "Column 4" },
+    { "type": "text", "id": "column_title_4", "label": "Title" },
+    { "type": "textarea", "id": "column_description_4", "label": "Description" },
+    { "type": "header", "content": "Column 5" },
+    { "type": "text", "id": "column_title_5", "label": "Title" },
+    { "type": "textarea", "id": "column_description_5", "label": "Description" },
+    { "type": "header", "content": "Column 6" },
+    { "type": "text", "id": "column_title_6", "label": "Title" },
+    { "type": "textarea", "id": "column_description_6", "label": "Description" }
+  ],
+  "presets": [
+    { "name": "Numbered columns" }
+  ],
+  "tag": null,
+  "class": "numbered-columns-block"
+}
+{% endschema %}

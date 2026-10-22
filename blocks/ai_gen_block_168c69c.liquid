@@ -1,0 +1,166 @@
+{% doc %}
+  @prompt
+    Create a custom breadcrumb navigation block. The breadcrumb should display the page hierarchy (e.g., Home / About Us) with the following design: navy blue text color matching a premium cycling apparel brand aesthetic, compact and minimal layout, separator styled as a "/" character with slight spacing, the last item (current page) displayed in a lighter or muted tone to indicate active state, small font size appropriate for a pre-content navigation element, and left-aligned. The block should dynamically render the correct breadcrumb trail based on the current page context.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-breadcrumb-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    color: {{ block.settings.text_color }};
+    font-family: 'ChiKareGo2';
+    font-size: {{ block.settings.font_size }}px;
+    font-weight: 500;
+    line-height: 22.5px;
+    letter-spacing: 0%;
+    text-align: left;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }} ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }} li {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }} a {
+    color: {{ block.settings.text_color }};
+    text-decoration: none;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }} a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }} a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }}__separator {
+    margin: 0 0.55em;
+    color: {{ block.settings.text_color }};
+    aria-hidden: true;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }}__current {
+    color: {{ block.settings.muted_color }};
+  }
+{% endstyle %}
+
+<nav class="ai-breadcrumb-{{ ai_gen_id }}" aria-label="Breadcrumb" style="width: {{ block.settings.desktop_width_percent }}%;" {{ block.shopify_attributes }}>
+  <ol>
+    <li>
+      {% if request.page_type == 'index' %}
+        <span class="ai-breadcrumb-{{ ai_gen_id }}__current" aria-current="page">{{ block.settings.home_label | escape }}</span>
+      {% else %}
+        <a href="{{ routes.root_url }}">{{ block.settings.home_label | escape }}</a>
+      {% endif %}
+    </li>
+
+    {% unless request.page_type == 'index' %}
+      {% if request.page_type == 'product' and collection %}
+        <li><span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">/</span><a href="{{ collection.url }}">{{ collection.title | escape }}</a></li>
+      {% endif %}
+      {% if request.page_type == 'article' and blog %}
+        <li><span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">/</span><a href="{{ blog.url }}">{{ blog.title | escape }}</a></li>
+      {% endif %}
+      {% if request.page_type == 'collection' and collection and current_tags %}
+        <li><span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">/</span><a href="{{ collection.url }}">{{ collection.title | escape }}</a></li>
+        <li><span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">/</span><span class="ai-breadcrumb-{{ ai_gen_id }}__current" aria-current="page">{{ current_tags | join: ', ' | escape }}</span></li>
+      {% elsif request.page_type == 'collection' and collection %}
+        <li><span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">/</span><span class="ai-breadcrumb-{{ ai_gen_id }}__current" aria-current="page">{{ collection.title | escape }}</span></li>
+      {% elsif request.page_type == 'product' %}
+        <li><span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">/</span><span class="ai-breadcrumb-{{ ai_gen_id }}__current" aria-current="page">{{ product.title | escape }}</span></li>
+      {% elsif request.page_type == 'article' %}
+        <li><span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">/</span><span class="ai-breadcrumb-{{ ai_gen_id }}__current" aria-current="page">{{ article.title | escape }}</span></li>
+      {% elsif request.page_type == 'page' %}
+        <li><span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">/</span><span class="ai-breadcrumb-{{ ai_gen_id }}__current" aria-current="page">{{ page.title | escape }}</span></li>
+      {% elsif request.page_type == 'blog' %}
+        <li><span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">/</span><span class="ai-breadcrumb-{{ ai_gen_id }}__current" aria-current="page">{{ blog.title | escape }}</span></li>
+      {% elsif request.page_type == 'search' %}
+        <li><span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">/</span><span class="ai-breadcrumb-{{ ai_gen_id }}__current" aria-current="page">{{ block.settings.search_label | escape }}</span></li>
+      {% elsif request.page_type == 'cart' %}
+        <li><span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">/</span><span class="ai-breadcrumb-{{ ai_gen_id }}__current" aria-current="page">{{ block.settings.cart_label | escape }}</span></li>
+      {% endif %}
+    {% endunless %}
+  </ol>
+</nav>
+
+{% schema %}
+{
+  "name": "Breadcrumb navigation",
+  "settings": [
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "text",
+      "id": "home_label",
+      "label": "Home label",
+      "default": "Home"
+    },
+    {
+      "type": "text",
+      "id": "search_label",
+      "label": "Search label",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "cart_label",
+      "label": "Cart label",
+      "default": "Cart"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#142B4A"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Current page color",
+      "default": "#52647A"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Breadcrumb navigation"
+    }
+  ],
+  "tag": null,
+  "class": "breadcrumb-navigation"
+}
+{% endschema %}

@@ -1,0 +1,332 @@
+{% doc %}
+  @prompt
+    Create a custom card block with the following features:
+    
+    HEADER SECTION:
+    
+    Full-width header bar with bold uppercase centered text (e.g. "RIDE & EXPLORE")
+    Schema settings: header text, header text color, header background color, header font size
+    IMAGE SECTION:
+    
+    Full-width image area using an image_picker schema setting
+    Image fills the card width, fixed height (e.g. 320px), object-fit cover
+    Schema settings: image picker, image height (range 200-600px, default 320)
+    FOOTER SECTION:
+    
+    Full-width footer bar with centered link text (e.g. "» SHOP COLLECTION")
+    The footer text is a clickable link (URL configurable)
+    Schema settings: footer link text, footer link URL, footer text color, footer background color, footer font size, footer font weight, footer letter spacing
+    CARD OVERALL:
+    
+    Schema settings: card border color, card border width, card border radius, card background color
+    Clean sports/cycling aesthetic
+    No padding between header, image, and footer — they stack flush against each other
+    Entire card is compact and portrait-oriented (like a tall card)
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-sports-card-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    background: {{ block.settings.card_background_color }};
+    border: {{ block.settings.card_border_width }}px solid {{ block.settings.card_border_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .ai-sports-card-{{ ai_gen_id }}__header,
+  .ai-sports-card-{{ ai_gen_id }}__footer {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .ai-sports-card-{{ ai_gen_id }}__header {
+    padding: 0 18px;
+    background: {{ block.settings.header_background_color }};
+    color: {{ block.settings.header_text_color }};
+    font-size: {{ block.settings.header_font_size }}px;
+    font-family: "ChiKareGo2";
+    font-weight: 500;
+    line-height: 40px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ai-sports-card-{{ ai_gen_id }}__image {
+    width: 100%;
+    height: {{ block.settings.image_height }}px;
+    display: block;
+    object-fit: cover;
+  }
+
+  .ai-sports-card-{{ ai_gen_id }}__placeholder {
+    width: 100%;
+    height: {{ block.settings.image_height }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: #e8e8e8;
+    color: #333333;
+  }
+
+  .ai-sports-card-{{ ai_gen_id }}__placeholder svg {
+    width: 100%;
+    height: 100%;
+    max-width: 240px;
+    max-height: 240px;
+  }
+
+  .ai-sports-card-{{ ai_gen_id }}__empty-state {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    text-align: center;
+    color: #333333;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .ai-sports-card-{{ ai_gen_id }}__footer {
+    min-height: 58px;
+    padding: 14px 18px;
+    background: {{ block.settings.footer_background_color }};
+  }
+
+  .ai-sports-card-{{ ai_gen_id }}__link {
+    color: {{ block.settings.footer_text_color }};
+    font-size: {{ block.settings.footer_font_size }}px;
+    font-weight: {{ block.settings.footer_font_weight }};
+    letter-spacing: {{ block.settings.footer_letter_spacing }}px;
+    line-height: 1.2;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .ai-sports-card-{{ ai_gen_id }}__link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .ai-sports-card-{{ ai_gen_id }}__link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-sports-card-{{ ai_gen_id }} {
+      width: 100%;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-sports-card-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-sports-card-{{ ai_gen_id }}__header">
+    {{ block.settings.header_text | escape }}
+  </div>
+
+  {% if block.settings.image != blank %}
+    <img
+      class="ai-sports-card-{{ ai_gen_id }}__image"
+      src="{{ block.settings.image | image_url: width: 1600 }}"
+      alt="{{ block.settings.image.alt | default: block.settings.header_text | escape }}"
+      loading="lazy"
+      width="{{ block.settings.image.width }}"
+      height="{{ block.settings.image_height }}"
+    >
+  {% else %}
+    <div class="ai-sports-card-{{ ai_gen_id }}__placeholder">
+      {{ 'image' | placeholder_svg_tag }}
+      <div class="ai-sports-card-{{ ai_gen_id }}__empty-state">Add an image to complete this card</div>
+    </div>
+  {% endif %}
+
+  <div class="ai-sports-card-{{ ai_gen_id }}__footer">
+    {% if block.settings.footer_link != blank %}
+      <a class="ai-sports-card-{{ ai_gen_id }}__link" href="{{ block.settings.footer_link }}">
+        {{ block.settings.footer_text | escape }}
+      </a>
+    {% else %}
+      <span class="ai-sports-card-{{ ai_gen_id }}__link">{{ block.settings.footer_text | escape }}</span>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Sports card",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Card"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Border color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "header_text",
+      "label": "Text",
+      "default": "RIDE & EXPLORE"
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "header_background_color",
+      "label": "Background",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "header_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 25
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Image height",
+      "min": 200,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "default": 320
+    },
+    {
+      "type": "header",
+      "content": "Footer"
+    },
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Link text",
+      "default": "» SHOP COLLECTION"
+    },
+    {
+      "type": "url",
+      "id": "footer_link",
+      "label": "Link URL"
+    },
+    {
+      "type": "color",
+      "id": "footer_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "footer_background_color",
+      "label": "Background",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "footer_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "footer_font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "footer_letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sports card"
+    }
+  ],
+  "tag": null,
+  "class": "sports-card-block"
+}
+{% endschema %}

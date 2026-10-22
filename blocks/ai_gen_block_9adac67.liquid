@@ -1,0 +1,146 @@
+{% doc %}
+  @prompt
+    Create a custom "Filter Products" drawer/modal block for a collection page with the following design and features:
+    
+    Layout & Style:
+    
+    Dark navy header bar with white bold uppercase text " FILTER PRODUCTS " and an X close button on the right
+    White background body
+    Subheading text: "Refine the collection to find your next ride essential."
+    Two-column layout: left column for Category, Price Range, Availability; right column for Apparel Size, Shoe Size (EU), Colour
+    Clean, minimal aesthetic with a premium sports/cycling brand feel
+    Left Column Filters:
+    
+    CATEGORY — checkbox list (Jerseys, Bib shorts, Shoes) with item counts in parentheses
+    PRICE RANGE — two number inputs side by side labeled "MIN (Rp)" and "MAX (Rp)" with placeholder values (0 and 8,000,000)
+    AVAILABILITY — two checkboxes: "In-stock items only" and "Sale items only"
+    Right Column Filters:
+    
+    APPAREL SIZE — pill/button toggle group: XS, S, M, L, XL, XXL
+    SHOE SIZE (EU) — pill/button toggle grid: 39, 40, 41, 42, 43, 44, 45, 46
+    COLOUR — checkbox grid in 3 columns: Black, White, Purple, Earth, Yellow, Pink
+    Footer: "Choose more than one option to broaden your results within a group." and "Selections apply when you press Apply Filters."
+    
+    Action Buttons (full width, side by side):
+    
+    "CLEAR ALL" — white background, dark border
+    "APPLY FILTERS" — bold red background, white text
+    Behavior:
+    
+    Checkboxes and size pills are interactive toggles
+    Designed to integrate with Shopify's native collection filtering where possible
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+  .ai-filter-{{ ai_gen_id }} { display:block; width:100%; max-width:{{ block.settings.desktop_width_percent }}%; color:#17202c; font-family:inherit; }
+  .ai-filter-{{ ai_gen_id }}__trigger { border:1px solid #17202c; background:#fff; color:#17202c; padding:12px 20px; font:inherit; font-weight:700; cursor:pointer; }
+  .ai-filter-{{ ai_gen_id }}__backdrop { position:fixed; inset:0; z-index:9998; background:rgba(5,15,29,.58); opacity:0; visibility:hidden; transition:opacity .2s ease,visibility .2s ease; }
+  .ai-filter-{{ ai_gen_id }}__panel { position:fixed; z-index:9999; inset:0 0 0 auto; width:min(760px,100%); height:100dvh; display:flex; flex-direction:column; background:#fff; transform:translateX(100%); transition:transform .25s ease; box-shadow:-8px 0 30px rgba(0,0,0,.18); }
+  .ai-filter-{{ ai_gen_id }}.is-open .ai-filter-{{ ai_gen_id }}__backdrop { opacity:1; visibility:visible; }
+  .ai-filter-{{ ai_gen_id }}.is-open .ai-filter-{{ ai_gen_id }}__panel { transform:translateX(0); }
+  .ai-filter-{{ ai_gen_id }}__header { min-height:62px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; background:#10233f; color:#fff; }
+  .ai-filter-{{ ai_gen_id }}__title { margin:0; font-size:16px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+  .ai-filter-{{ ai_gen_id }}__close { display:grid; place-items:center; width:42px; height:42px; border:0; background:transparent; color:#fff; font-size:28px; cursor:pointer; }
+  .ai-filter-{{ ai_gen_id }}__form { min-height:0; flex:1; display:flex; flex-direction:column; }
+  .ai-filter-{{ ai_gen_id }}__body { overflow:auto; padding:22px 26px 18px; }
+  .ai-filter-{{ ai_gen_id }}__intro { margin:0 0 24px; color:#424b57; font-size:14px; }
+  .ai-filter-{{ ai_gen_id }}__columns { display:grid; grid-template-columns:1fr 1fr; gap:30px; }
+  .ai-filter-{{ ai_gen_id }}__group { padding:0 0 22px; margin:0 0 20px; border-bottom:1px solid #e1e5e9; }
+  .ai-filter-{{ ai_gen_id }}__group-title { display:block; margin:0 0 13px; font-size:12px; letter-spacing:.1em; font-weight:800; color:#17202c; }
+  .ai-filter-{{ ai_gen_id }}__choice-list { display:grid; gap:11px; }
+  .ai-filter-{{ ai_gen_id }}__check { display:flex; align-items:center; gap:10px; font-size:14px; cursor:pointer; }
+  .ai-filter-{{ ai_gen_id }}__check input { width:17px; height:17px; accent-color:#10233f; }
+  .ai-filter-{{ ai_gen_id }}__count { color:#68717b; }
+  .ai-filter-{{ ai_gen_id }}__price-labels,.ai-filter-{{ ai_gen_id }}__price-inputs { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .ai-filter-{{ ai_gen_id }}__price-labels { margin-bottom:6px; font-size:10px; font-weight:800; letter-spacing:.08em; }
+  .ai-filter-{{ ai_gen_id }}__price-input { min-width:0; padding:11px 10px; border:1px solid #cbd1d8; border-radius:2px; color:#17202c; font:inherit; }
+  .ai-filter-{{ ai_gen_id }}__pills { display:flex; flex-wrap:wrap; gap:8px; }
+  .ai-filter-{{ ai_gen_id }}__pill { position:relative; }
+  .ai-filter-{{ ai_gen_id }}__pill input { position:absolute; width:1px; height:1px; opacity:0; }
+  .ai-filter-{{ ai_gen_id }}__pill label { min-width:42px; min-height:38px; display:grid; place-items:center; padding:0 10px; border:1px solid #cbd1d8; background:#fff; color:#17202c; font-size:13px; font-weight:650; cursor:pointer; }
+  .ai-filter-{{ ai_gen_id }}__pill input:checked + label { background:#10233f; border-color:#10233f; color:#fff; }
+  .ai-filter-{{ ai_gen_id }}__pill input:focus-visible + label,.ai-filter-{{ ai_gen_id }}__close:focus-visible,.ai-filter-{{ ai_gen_id }}__trigger:focus-visible,.ai-filter-{{ ai_gen_id }}__button:focus-visible { outline:3px solid #df2638; outline-offset:2px; }
+  .ai-filter-{{ ai_gen_id }}__shoes { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+  .ai-filter-{{ ai_gen_id }}__colours { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px 8px; }
+  .ai-filter-{{ ai_gen_id }}__footer { margin-top:auto; padding:15px 26px 22px; border-top:1px solid #e1e5e9; background:#fff; }
+  .ai-filter-{{ ai_gen_id }}__note { margin:0 0 7px; color:#56616e; font-size:12px; line-height:1.5; }
+  .ai-filter-{{ ai_gen_id }}__actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px; }
+  .ai-filter-{{ ai_gen_id }}__button { min-height:48px; padding:12px 16px; border:1px solid #10233f; font:inherit; font-size:12px; font-weight:800; letter-spacing:.06em; cursor:pointer; }
+  .ai-filter-{{ ai_gen_id }}__button--clear { background:#fff; color:#10233f; }
+  .ai-filter-{{ ai_gen_id }}__button--apply { background:#c9182b; border-color:#c9182b; color:#fff; }
+  @media(max-width:600px) { .ai-filter-{{ ai_gen_id }}__body { padding:19px 18px; } .ai-filter-{{ ai_gen_id }}__columns { grid-template-columns:1fr; gap:0; } .ai-filter-{{ ai_gen_id }}__header { padding:0 18px; } .ai-filter-{{ ai_gen_id }}__footer { padding:14px 18px 18px; } }
+  @media(prefers-reduced-motion:reduce) { .ai-filter-{{ ai_gen_id }}__panel,.ai-filter-{{ ai_gen_id }}__backdrop { transition:none; } }
+{% endstyle %}
+<filter-products-{{ ai_gen_id }} class="ai-filter-{{ ai_gen_id }}" style="width:{{ block.settings.desktop_width_percent }}%;" {{ block.shopify_attributes }}>
+  <button class="ai-filter-{{ ai_gen_id }}__trigger" type="button" data-open>FILTER PRODUCTS</button>
+  <div class="ai-filter-{{ ai_gen_id }}__backdrop" data-close aria-hidden="true"></div>
+  <section class="ai-filter-{{ ai_gen_id }}__panel" role="dialog" aria-modal="true" aria-label="Filter products" aria-hidden="true">
+    <div class="ai-filter-{{ ai_gen_id }}__header"><h2 class="ai-filter-{{ ai_gen_id }}__title">Filter products</h2><button class="ai-filter-{{ ai_gen_id }}__close" type="button" aria-label="Close filters" data-close>×</button></div>
+    <form class="ai-filter-{{ ai_gen_id }}__form" method="get" action="{{ collection.url }}">
+      <div class="ai-filter-{{ ai_gen_id }}__body">
+        <p class="ai-filter-{{ ai_gen_id }}__intro">Refine the collection to find your next ride essential.</p>
+        <div class="ai-filter-{{ ai_gen_id }}__columns">
+          <div>
+            <fieldset class="ai-filter-{{ ai_gen_id }}__group"><legend class="ai-filter-{{ ai_gen_id }}__group-title">CATEGORY</legend><div class="ai-filter-{{ ai_gen_id }}__choice-list">
+              {% for item in (1..3) %}{% case item %}{% when 1 %}{% assign cat = 'Jerseys' %}{% when 2 %}{% assign cat = 'Bib shorts' %}{% else %}{% assign cat = 'Shoes' %}{% endcase %}
+                {% assign count = 0 %}{% if collection.products.size > 0 %}{% for product_item in collection.products %}{% if product_item.type == cat %}{% assign count = count | plus: 1 %}{% endif %}{% endfor %}{% endif %}
+                <label class="ai-filter-{{ ai_gen_id }}__check"><input type="checkbox" name="filter.p.product_type" value="{{ cat | escape }}"><span>{{ cat }}</span><span class="ai-filter-{{ ai_gen_id }}__count">({{ count }})</span></label>
+              {% endfor %}
+            </div></fieldset>
+            <fieldset class="ai-filter-{{ ai_gen_id }}__group"><legend class="ai-filter-{{ ai_gen_id }}__group-title">PRICE RANGE</legend><div class="ai-filter-{{ ai_gen_id }}__price-labels"><label for="ai-price-min-{{ ai_gen_id }}">MIN (Rp)</label><label for="ai-price-max-{{ ai_gen_id }}">MAX (Rp)</label></div><div class="ai-filter-{{ ai_gen_id }}__price-inputs"><input class="ai-filter-{{ ai_gen_id }}__price-input" id="ai-price-min-{{ ai_gen_id }}" type="number" min="0" name="filter.v.price.gte" placeholder="0" value="{{ request.params['filter.v.price.gte'] | escape }}"><input class="ai-filter-{{ ai_gen_id }}__price-input" id="ai-price-max-{{ ai_gen_id }}" type="number" min="0" name="filter.v.price.lte" placeholder="8,000,000" value="{{ request.params['filter.v.price.lte'] | escape }}"></div></fieldset>
+            <fieldset class="ai-filter-{{ ai_gen_id }}__group"><legend class="ai-filter-{{ ai_gen_id }}__group-title">AVAILABILITY</legend><div class="ai-filter-{{ ai_gen_id }}__choice-list"><label class="ai-filter-{{ ai_gen_id }}__check"><input type="checkbox" name="filter.v.availability" value="1"><span>In-stock items only</span></label><label class="ai-filter-{{ ai_gen_id }}__check"><input type="checkbox" name="filter.p.on_sale" value="true"><span>Sale items only</span></label></div></fieldset>
+          </div>
+          <div>
+            <fieldset class="ai-filter-{{ ai_gen_id }}__group"><legend class="ai-filter-{{ ai_gen_id }}__group-title">APPAREL SIZE</legend><div class="ai-filter-{{ ai_gen_id }}__pills">{% assign apparel_sizes = 'XS,S,M,L,XL,XXL' | split: ',' %}{% for size in apparel_sizes %}<span class="ai-filter-{{ ai_gen_id }}__pill"><input id="ai-apparel-{{ ai_gen_id }}-{{ forloop.index }}" type="checkbox" name="filter.v.option.size" value="{{ size }}"><label for="ai-apparel-{{ ai_gen_id }}-{{ forloop.index }}">{{ size }}</label></span>{% endfor %}</div></fieldset>
+            <fieldset class="ai-filter-{{ ai_gen_id }}__group"><legend class="ai-filter-{{ ai_gen_id }}__group-title">SHOE SIZE (EU)</legend><div class="ai-filter-{{ ai_gen_id }}__shoes">{% assign shoe_sizes = '39,40,41,42,43,44,45,46' | split: ',' %}{% for size in shoe_sizes %}<span class="ai-filter-{{ ai_gen_id }}__pill"><input id="ai-shoe-{{ ai_gen_id }}-{{ forloop.index }}" type="checkbox" name="filter.v.option.shoe-size" value="{{ size }}"><label for="ai-shoe-{{ ai_gen_id }}-{{ forloop.index }}">{{ size }}</label></span>{% endfor %}</div></fieldset>
+            <fieldset class="ai-filter-{{ ai_gen_id }}__group"><legend class="ai-filter-{{ ai_gen_id }}__group-title">COLOUR</legend><div class="ai-filter-{{ ai_gen_id }}__colours">{% assign colours = 'Black,White,Purple,Earth,Yellow,Pink' | split: ',' %}{% for colour in colours %}<label class="ai-filter-{{ ai_gen_id }}__check"><input type="checkbox" name="filter.v.option.colour" value="{{ colour }}"><span>{{ colour }}</span></label>{% endfor %}</div></fieldset>
+          </div>
+        </div>
+      </div>
+      <div class="ai-filter-{{ ai_gen_id }}__footer"><p class="ai-filter-{{ ai_gen_id }}__note">Choose more than one option to broaden your results within a group.</p><p class="ai-filter-{{ ai_gen_id }}__note">Selections apply when you press Apply Filters.</p><div class="ai-filter-{{ ai_gen_id }}__actions"><button class="ai-filter-{{ ai_gen_id }}__button ai-filter-{{ ai_gen_id }}__button--clear" type="reset">CLEAR ALL</button><button class="ai-filter-{{ ai_gen_id }}__button ai-filter-{{ ai_gen_id }}__button--apply" type="submit">APPLY FILTERS</button></div></div>
+    </form>
+  </section>
+</filter-products-{{ ai_gen_id }}>
+<script>
+  (() => {
+    const tagName = 'filter-products-{{ ai_gen_id }}';
+    if (customElements.get(tagName)) return;
+    class FilterProducts{{ ai_gen_id }} extends HTMLElement {
+      connectedCallback() {
+        this.panel = this.querySelector('[role="dialog"]');
+        this.openButton = this.querySelector('[data-open]');
+        this.openButton.addEventListener('click', () => this.open());
+        this.querySelectorAll('[data-close]').forEach((button) => button.addEventListener('click', () => this.close()));
+        this.addEventListener('keydown', (event) => { if (event.key === 'Escape') this.close(); });
+        this.querySelector('form').addEventListener('reset', () => { window.setTimeout(() => { window.location.href = this.querySelector('form').action; }, 0); });
+      }
+      open() { this.classList.add('is-open'); this.panel.setAttribute('aria-hidden', 'false'); document.documentElement.style.overflow = 'hidden'; this.querySelector('[data-close]:not([aria-hidden])')?.focus(); }
+      close() { this.classList.remove('is-open'); this.panel.setAttribute('aria-hidden', 'true'); document.documentElement.style.overflow = ''; this.openButton.focus(); }
+    }
+    customElements.define(tagName, FilterProducts{{ ai_gen_id }});
+  })();
+</script>
+{% schema %}
+{
+  "name": "Filter products drawer",
+  "settings": [
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "Filter products drawer"
+    }
+  ],
+  "tag": null,
+  "class": "filter-products-drawer"
+}
+{% endschema %}

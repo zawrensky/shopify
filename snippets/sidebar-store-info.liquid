@@ -1,0 +1,92 @@
+{% assign si_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+  .sidebar-si-{{ si_id }} {
+    display: block;
+    width: 100%;
+    border: 1px solid {{ block.settings.border_color }};
+    background: {{ block.settings.bg_color }};
+    box-sizing: border-box;
+  }
+  .sidebar-si-{{ si_id }}__heading {
+    width: 100%;
+    line-height: 40px;
+    background: {{ block.settings.header_bg }};
+    color: {{ block.settings.header_text }};
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .sidebar-si-{{ si_id }}__body {
+    padding: 14px 16px;
+  }
+  .sidebar-si-{{ si_id }}__image {
+    width: 100%;
+    display: block;
+    margin-bottom: 12px;
+    object-fit: cover;
+    max-height: 160px;
+  }
+  .sidebar-si-{{ si_id }}__address {
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0 0 12px;
+    color: {{ block.settings.text_color }};
+  }
+  .sidebar-si-{{ si_id }}__hours {
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0 0 12px;
+    color: {{ block.settings.text_color }};
+  }
+  .sidebar-si-{{ si_id }}__map-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: {{ block.settings.link_color }};
+    text-decoration: none;
+  }
+  .sidebar-si-{{ si_id }}__map-link:hover {
+    text-decoration: underline;
+  }
+{% endstyle %}
+
+<div class="sidebar-si-{{ si_id }}" {{ block.shopify_attributes }}>
+  <h3 class="sidebar-si-{{ si_id }}__heading">{{ block.settings.heading | escape }}</h3>
+  <div class="sidebar-si-{{ si_id }}__body">
+
+    {% if block.settings.store_image %}
+      <img class="sidebar-si-{{ si_id }}__image"
+           src="{{ block.settings.store_image | image_url: width: 400 }}"
+           alt="{{ block.settings.store_image.alt | default: block.settings.store_name | escape }}"
+           loading="lazy"
+        />
+    {% endif %}
+
+    {% if block.settings.store_name != blank or block.settings.address != blank %}
+      <p class="sidebar-si-{{ si_id }}__address">
+        {% if block.settings.store_name != blank %}
+          <strong>{{ block.settings.store_name | escape }}</strong><br>
+        {% endif %}
+        {{ block.settings.address | newline_to_br }}
+      </p>
+    {% endif %}
+
+    {% if block.settings.hours != blank %}
+      <p class="sidebar-si-{{ si_id }}__hours">
+        {{ block.settings.hours | newline_to_br }}
+      </p>
+    {% endif %}
+
+    {% if block.settings.map_url != blank %}
+      <a class="sidebar-si-{{ si_id }}__map-link"
+         href="{{ block.settings.map_url }}"
+         target="_blank"
+         rel="noopener">
+        » {{ block.settings.map_label | default: 'View Map' | escape }}
+      </a>
+    {% endif %}
+
+  </div>
+</div>

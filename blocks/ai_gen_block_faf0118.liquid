@@ -1,0 +1,237 @@
+{% doc %}
+  @prompt
+    Create a CTA (Call to Action) banner block with: 1) Full-width navy blue background, 2) A bold centered headline (e.g. "READY FOR THE NEXT RIDE?") in white, uppercase, 3) Two CTA links side by side below the headline, separated by a vertical divider "|", each prefixed with "»" (e.g. "» SHOP THE COLLECTION" and "» READ THE JOURNAL"). Settings: background color, headline text, headline font size, link 1 label and URL, link 2 label and URL, link text color, divider color, padding top and bottom. Responsive: links stack vertically on mobile, divider hidden on mobile.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-cta-banner-{{ ai_gen_id }} {
+    display: block;
+    box-sizing: border-box;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.padding_top_bottom }}px 24px;
+    background-color: {{ block.settings.background_color }};
+    color: #ffffff;
+    text-align: center;
+  }
+
+  .ai-cta-banner-{{ ai_gen_id }}__inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .ai-cta-banner-{{ ai_gen_id }}__heading {
+    margin: 0 0 20px;
+    color: #ffffff;
+    font-size: {{ block.settings.headline_font_size }}px;
+    font-family: 'ChiKareGo2';
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .ai-cta-banner-{{ ai_gen_id }}__links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .ai-cta-banner-{{ ai_gen_id }}__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: {{ block.settings.link_text_color }};
+    font-size: {{ block.settings.link_font_size}}px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-decoration: none;
+    text-underline-offset: 4px;
+    text-transform: uppercase;
+  }
+
+  .ai-cta-banner-{{ ai_gen_id }}__link:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .ai-cta-banner-{{ ai_gen_id }}__link:focus-visible {
+    outline: 2px solid {{ block.settings.link_text_color }};
+    outline-offset: 4px;
+  }
+
+  .ai-cta-banner-{{ ai_gen_id }}__prefix {
+    margin-right: 8px;
+    text-decoration: none;
+  }
+
+  .ai-cta-banner-{{ ai_gen_id }}__divider {
+    width: 1px;
+    height: 28px;
+    flex: 0 0 1px;
+    background-color: {{ block.settings.divider_color }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-cta-banner-{{ ai_gen_id }} {
+      padding-right: 18px;
+      padding-left: 18px;
+    }
+
+    .ai-cta-banner-{{ ai_gen_id }}__heading {
+      margin-bottom: 16px;
+      font-size: min({{ block.settings.headline_font_size }}px, 8vw);
+    }
+
+    .ai-cta-banner-{{ ai_gen_id }}__links {
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .ai-cta-banner-{{ ai_gen_id }}__divider {
+      display: none;
+    }
+
+    .ai-cta-banner-{{ ai_gen_id }}__link {
+      justify-content: center;
+      text-align: center;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-cta-banner-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-cta-banner-{{ ai_gen_id }}__inner">
+    {% if block.settings.headline != blank %}
+      <h2 class="ai-cta-banner-{{ ai_gen_id }}__heading">{{ block.settings.headline | escape }}</h2>
+    {% endif %}
+    <nav class="ai-cta-banner-{{ ai_gen_id }}__links" aria-label="Call to action">
+      {% if block.settings.link_1_label != blank and block.settings.link_1_url != blank %}
+        <a class="ai-cta-banner-{{ ai_gen_id }}__link" href="{{ block.settings.link_1_url }}">
+          <span class="ai-cta-banner-{{ ai_gen_id }}__prefix" aria-hidden="true">»</span>{{ block.settings.link_1_label | escape }}
+        </a>
+      {% endif %}
+      {% if block.settings.link_1_label != blank and block.settings.link_1_url != blank and block.settings.link_2_label != blank and block.settings.link_2_url != blank %}
+        <span class="ai-cta-banner-{{ ai_gen_id }}__divider" aria-hidden="true"></span>
+      {% endif %}
+      {% if block.settings.link_2_label != blank and block.settings.link_2_url != blank %}
+        <a class="ai-cta-banner-{{ ai_gen_id }}__link" href="{{ block.settings.link_2_url }}">
+          <span class="ai-cta-banner-{{ ai_gen_id }}__prefix" aria-hidden="true">»</span>{{ block.settings.link_2_label | escape }}
+        </a>
+      {% endif %}
+    </nav>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "CTA banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "READY FOR THE NEXT RIDE?"
+    },
+    {
+      "type": "range",
+      "id": "headline_font_size",
+      "label": "Headline font size",
+      "min": 18,
+      "max": 56,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "link_font_size",
+      "label": "Link font size",
+      "min": 12,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "text",
+      "id": "link_1_label",
+      "label": "Link 1 label",
+      "default": "SHOP THE COLLECTION"
+    },
+    {
+      "type": "url",
+      "id": "link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "link_2_label",
+      "label": "Link 2 label",
+      "default": "READ THE JOURNAL"
+    },
+    {
+      "type": "url",
+      "id": "link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#06149B"
+    },
+    {
+      "type": "color",
+      "id": "link_text_color",
+      "label": "Link text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_bottom",
+      "label": "Top and bottom padding",
+      "min": 16,
+      "max": 96,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "CTA banner"
+    }
+  ],
+  "tag": null,
+  "class": "cta-banner-block"
+}
+{% endschema %}

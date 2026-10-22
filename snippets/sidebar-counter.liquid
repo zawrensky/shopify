@@ -1,0 +1,49 @@
+{% assign vc_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+  .sidebar-vc-{{ vc_id }} {
+    display: block;
+    width: 100%;
+    border: 1px solid {{ block.settings.border_color }};
+    background: {{ block.settings.bg_color }};
+    box-sizing: border-box;
+  }
+  .sidebar-vc-{{ vc_id }}__heading {
+    width: 100%;
+    line-height: 40px;
+    background: {{ block.settings.header_bg }};
+    color: {{ block.settings.header_text }};
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .sidebar-vc-{{ vc_id }}__body {
+    padding: 14px 16px;
+  }
+  .sidebar-vc-{{ vc_id }}__label {
+    font-size: 13px;
+    font-weight: 700;
+    color: {{ block.settings.text_color }};
+    margin: 0 0 8px;
+  }
+  .sidebar-vc-{{ vc_id }}__embed {
+    margin-top: 8px;
+  }
+  .sidebar-vc-{{ vc_id }}__embed img {
+    max-width: 100%;
+  }
+{% endstyle %}
+
+<div class="sidebar-vc-{{ vc_id }}" {{ block.shopify_attributes }}>
+  <h3 class="sidebar-vc-{{ vc_id }}__heading">{{ block.settings.heading | escape }}</h3>
+  <div class="sidebar-vc-{{ vc_id }}__body">
+    {% if block.settings.flag_counter_code != blank %}
+      <div class="sidebar-vc-{{ vc_id }}__embed">
+        {{ block.settings.flag_counter_code }}
+      </div>
+    {% endif %}
+
+  </div>
+</div>

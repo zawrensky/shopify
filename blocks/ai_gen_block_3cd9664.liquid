@@ -1,0 +1,52 @@
+{% doc %}
+  @prompt
+    Create a custom "Brands We Love" section block with the following features:
+    
+    Header: Editable section title (default: " BRANDS WE LOVE ") with customizable text color, background color (default: dark navy/blue), font size, and text alignment.
+    
+    Brand Logo Grid: A responsive grid layout displaying brand logos with:
+    
+    Dynamic image picker blocks — merchant can add/remove brand logos freely (no hard-coded limit)
+    Each brand block has: an image_picker for the logo, an optional link URL, and an optional alt text field
+    Logos displayed in a multi-column responsive grid (3 columns desktop, 2 columns tablet, 2 columns mobile)
+    Each logo image is centered vertically and horizontally within its cell
+    Consistent logo height (60px) with object-fit: contain so logos aren't distorted
+    Section settings: background color (default white), padding top/bottom, max-width container, and thin navy border outline around the entire section.
+    
+    Schema: Use block type with type: "brand_item", settings for image, link, and alt. The section should support up to 20 brand blocks dynamically added by the merchant.
+    
+    , tambahkan pengaturan horizontal padding pada section layout, tambahkan pengaturan alignmment logo, dan jarak antar logo, atur posisi logo - logo rata tengah/kiri/kanan sesuai pengaturan alignment (default tengah), display logo flexbox rata tengah horizontal
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+  .ai-brands-{{ ai_gen_id }} { display:block; width:100%; max-width:{{ block.settings.max_width }}px; margin-inline:auto; background:{{ block.settings.section_background }}; border:1px solid {{ block.settings.border_color }}; padding:{{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px; box-sizing:border-box; }
+  .ai-brands-{{ ai_gen_id }}__heading { width:100%; margin:0 0 24px; padding:0 18px; background:{{ block.settings.header_background }}; color:{{ block.settings.header_text_color }}; font-size:{{ block.settings.heading_size }}px; font-weight:500; line-height:40px; text-align:{{ block.settings.heading_alignment }}; letter-spacing:.08em; box-sizing:border-box; }
+  .ai-brands-{{ ai_gen_id }}__grid { display:flex; flex-direction: row; flex-wrap: wrap; gap:{{ block.settings.logo_gap }}px; justify-content: {{ block.settings.logo_alignment}}; }
+  .ai-brands-{{ ai_gen_id }}__item { min-width:30%; display:flex; align-items:center; justify-content:center; box-sizing:border-box; }
+  .ai-brands-{{ ai_gen_id }}__item a { display:flex; width:100%; height:100%; min-height:64px; align-items:center; justify-content:center; }
+  .ai-brands-{{ ai_gen_id }}__logo { display:block; width:auto; max-width:100%; height:60px; object-fit:contain; }
+  .ai-brands-{{ ai_gen_id }}__empty { margin:8px 0 0; color:#555555; font-size:13px; text-align:center; }
+  @media screen and (max-width:989px) { .ai-brands-{{ ai_gen_id }}__grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+{% endstyle %}
+<div class="ai-brands-{{ ai_gen_id }}" style="width:{{ block.settings.desktop_width_percent }}%;" {{ block.shopify_attributes }}>
+{% if block.settings.heading != blank %}<h2 class="ai-brands-{{ ai_gen_id }}__heading">{{ block.settings.heading | escape }}</h2>{% endif %}
+<div class="ai-brands-{{ ai_gen_id }}__grid">
+{% for i in (1..20) %}
+{% liquid
+assign image_key = 'brand_image_' | append: i
+assign link_key = 'brand_link_' | append: i
+assign alt_key = 'brand_alt_' | append: i
+assign brand_image = block.settings[image_key]
+assign brand_link = block.settings[link_key]
+assign brand_alt = block.settings[alt_key]
+%}
+{% if brand_image != blank %}<div class="ai-brands-{{ ai_gen_id }}__item">{% if brand_link != blank %}<a href="{{ brand_link }}" aria-label="{{ brand_alt | default: brand_image.alt | escape }}">{% endif %}<img class="ai-brands-{{ ai_gen_id }}__logo" src="{{ brand_image | image_url: width: 500 }}" alt="{{ brand_alt | default: brand_image.alt | escape }}" loading="lazy" width="{{ brand_image.width }}" height="{{ brand_image.height }}">{% if brand_link != blank %}</a>{% endif %}</div>{% endif %}
+{% endfor %}
+</div>
+{% assign any_brand = false %}{% for i in (1..20) %}{% assign image_key = 'brand_image_' | append: i %}{% if block.settings[image_key] != blank %}{% assign any_brand = true %}{% endif %}{% endfor %}
+{% unless any_brand %}<p class="ai-brands-{{ ai_gen_id }}__empty">Add brand logos in the block settings to populate this grid.</p>{% endunless %}
+</div>
+{% schema %}
+{"name":"Brands we love","settings":[{"type":"header","content":"Heading"},{"type":"text","id":"heading","label":"Title","default":" BRANDS WE LOVE "},{"type":"color","id":"header_background","label":"Background","default":"#102A43"},{"type":"color","id":"header_text_color","label":"Text color","default":"#FFFFFF"},{"type":"range","id":"heading_size","label":"Font size","min":14,"max":40,"step":2,"unit":"px","default":20},{"type":"select","id":"heading_alignment","label":"Alignment","options":[{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],"default":"center"},{"type":"header","content":"Section layout"},{"type":"color","id":"section_background","label":"Background","default":"#FFFFFF"},{"type":"color","id":"border_color","label":"Outline","default":"#102A43"},{"type":"range","id":"padding_vertical","label":"Vertical padding","min":0,"max":80,"step":4,"unit":"px","default":24},{"type":"range","id":"padding_horizontal","label":"Horizontal padding","min":0,"max":80,"step":4,"unit":"px","default":24},{"type":"range","id":"max_width","label":"Max width","min":600,"max":1600,"step":50,"unit":"px","default":1200},{"type":"range","id":"desktop_width_percent","label":"Desktop width","min":50,"max":100,"step":5,"unit":"%","default":100},{"type":"header","content":"Logo layout"},{"type":"select","id":"logo_alignment","label":"Logo alignment","options":[{"value":"flex-start","label":"Left"},{"value":"center","label":"Center"},{"value":"flex-end","label":"Right"}],"default":"center"},{"type":"range","id":"logo_gap","label":"Space between logos","min":0,"max":60,"step":4,"unit":"px","default":20},{"type":"header","content":"Brand logos"},{"type":"paragraph","content":"Add logos using the numbered image, link, and alt text fields. Leave unused image fields blank."},
+{"type":"image_picker","id":"brand_image_1","label":"Logo 1"},{"type":"url","id":"brand_link_1","label":"Logo 1 link"},{"type":"text","id":"brand_alt_1","label":"Logo 1 alt text"},{"type":"image_picker","id":"brand_image_2","label":"Logo 2"},{"type":"url","id":"brand_link_2","label":"Logo 2 link"},{"type":"text","id":"brand_alt_2","label":"Logo 2 alt text"},{"type":"image_picker","id":"brand_image_3","label":"Logo 3"},{"type":"url","id":"brand_link_3","label":"Logo 3 link"},{"type":"text","id":"brand_alt_3","label":"Logo 3 alt text"},{"type":"image_picker","id":"brand_image_4","label":"Logo 4"},{"type":"url","id":"brand_link_4","label":"Logo 4 link"},{"type":"text","id":"brand_alt_4","label":"Logo 4 alt text"},{"type":"image_picker","id":"brand_image_5","label":"Logo 5"},{"type":"url","id":"brand_link_5","label":"Logo 5 link"},{"type":"text","id":"brand_alt_5","label":"Logo 5 alt text"},{"type":"image_picker","id":"brand_image_6","label":"Logo 6"},{"type":"url","id":"brand_link_6","label":"Logo 6 link"},{"type":"text","id":"brand_alt_6","label":"Logo 6 alt text"},{"type":"image_picker","id":"brand_image_7","label":"Logo 7"},{"type":"url","id":"brand_link_7","label":"Logo 7 link"},{"type":"text","id":"brand_alt_7","label":"Logo 7 alt text"},{"type":"image_picker","id":"brand_image_8","label":"Logo 8"},{"type":"url","id":"brand_link_8","label":"Logo 8 link"},{"type":"text","id":"brand_alt_8","label":"Logo 8 alt text"},{"type":"image_picker","id":"brand_image_9","label":"Logo 9"},{"type":"url","id":"brand_link_9","label":"Logo 9 link"},{"type":"text","id":"brand_alt_9","label":"Logo 9 alt text"},{"type":"image_picker","id":"brand_image_10","label":"Logo 10"},{"type":"url","id":"brand_link_10","label":"Logo 10 link"},{"type":"text","id":"brand_alt_10","label":"Logo 10 alt text"},{"type":"image_picker","id":"brand_image_11","label":"Logo 11"},{"type":"url","id":"brand_link_11","label":"Logo 11 link"},{"type":"text","id":"brand_alt_11","label":"Logo 11 alt text"},{"type":"image_picker","id":"brand_image_12","label":"Logo 12"},{"type":"url","id":"brand_link_12","label":"Logo 12 link"},{"type":"text","id":"brand_alt_12","label":"Logo 12 alt text"},{"type":"image_picker","id":"brand_image_13","label":"Logo 13"},{"type":"url","id":"brand_link_13","label":"Logo 13 link"},{"type":"text","id":"brand_alt_13","label":"Logo 13 alt text"},{"type":"image_picker","id":"brand_image_14","label":"Logo 14"},{"type":"url","id":"brand_link_14","label":"Logo 14 link"},{"type":"text","id":"brand_alt_14","label":"Logo 14 alt text"},{"type":"image_picker","id":"brand_image_15","label":"Logo 15"},{"type":"url","id":"brand_link_15","label":"Logo 15 link"},{"type":"text","id":"brand_alt_15","label":"Logo 15 alt text"},{"type":"image_picker","id":"brand_image_16","label":"Logo 16"},{"type":"url","id":"brand_link_16","label":"Logo 16 link"},{"type":"text","id":"brand_alt_16","label":"Logo 16 alt text"},{"type":"image_picker","id":"brand_image_17","label":"Logo 17"},{"type":"url","id":"brand_link_17","label":"Logo 17 link"},{"type":"text","id":"brand_alt_17","label":"Logo 17 alt text"},{"type":"image_picker","id":"brand_image_18","label":"Logo 18"},{"type":"url","id":"brand_link_18","label":"Logo 18 link"},{"type":"text","id":"brand_alt_18","label":"Logo 18 alt text"},{"type":"image_picker","id":"brand_image_19","label":"Logo 19"},{"type":"url","id":"brand_link_19","label":"Logo 19 link"},{"type":"text","id":"brand_alt_19","label":"Logo 19 alt text"},{"type":"image_picker","id":"brand_image_20","label":"Logo 20"},{"type":"url","id":"brand_link_20","label":"Logo 20 link"},{"type":"text","id":"brand_alt_20","label":"Logo 20 alt text"}],"presets":[{"name":"Brands we love"}],"tag":null,"class":"brands-we-love"}
+{% endschema %}

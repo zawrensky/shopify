@@ -1,0 +1,162 @@
+{% doc %}
+  @prompt
+    Create a top bar announcement block that mimics a classic website header bar with: a left-aligned welcome/store name message with bold highlighted text in a contrasting color, a centered promotional message (e.g. FREE SHIPPING WORLDWIDE) with an icon like a bicycle or delivery icon (image picker) and bold highlighted text spaced between icon and text, and a right-aligned date and time display. The bar should have a light gray or white background with small compact text, and support customizable colors for the highlight/accent text. The overall style should be minimal and information-dense, similar to a classic website top info bar.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-info-bar-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    background: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+    border-top: 1px solid {{ block.settings.border_color }};
+    border-bottom: 1px solid {{ block.settings.border_color }};
+    font-size: {{ block.settings.text_size }}px;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+  }
+
+  .ai-info-bar-{{ ai_gen_id }}__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+    min-height: 38px;
+    padding: 8px 20px;
+  }
+
+  .ai-info-bar-{{ ai_gen_id }}__item {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ai-info-bar-{{ ai_gen_id }}__welcome { text-align: left; }
+  .ai-info-bar-{{ ai_gen_id }}__promotion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+  .ai-info-bar-{{ ai_gen_id }}__datetime { text-align: right; }
+  .ai-info-bar-{{ ai_gen_id }}__highlight { color: {{ block.settings.accent_color }}; font-weight: 700; }
+  .ai-info-bar-{{ ai_gen_id }}__icon,
+  .ai-info-bar-{{ ai_gen_id }}__icon-placeholder {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    object-fit: contain;
+  }
+  .ai-info-bar-{{ ai_gen_id }}__icon-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ai-info-bar-{{ ai_gen_id }}__icon-placeholder svg { width: 22px; height: 22px; fill: {{ block.settings.accent_color }}; }
+
+  @media screen and (max-width: 749px) {
+    .ai-info-bar-{{ ai_gen_id }}__inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 12px;
+      padding: 8px 12px;
+    }
+    .ai-info-bar-{{ ai_gen_id }}__promotion { grid-column: 1 / -1; grid-row: 1; }
+    .ai-info-bar-{{ ai_gen_id }}__welcome { grid-column: 1; grid-row: 2; }
+    .ai-info-bar-{{ ai_gen_id }}__datetime { grid-column: 2; grid-row: 2; }
+    .ai-info-bar-{{ ai_gen_id }}__item { font-size: {{ block.settings.mobile_text_size }}px; }
+  }
+{% endstyle %}
+
+<info-bar-{{ ai_gen_id }} class="ai-info-bar-{{ ai_gen_id }}" data-timezone="{{ block.settings.timezone_label | escape }}" {{ block.shopify_attributes }}>
+  <div class="ai-info-bar-{{ ai_gen_id }}__inner">
+    <div class="ai-info-bar-{{ ai_gen_id }}__item ai-info-bar-{{ ai_gen_id }}__welcome">
+      {{ block.settings.welcome_text }} <span class="ai-info-bar-{{ ai_gen_id }}__highlight">{{ block.settings.store_name }}</span>
+    </div>
+    <div class="ai-info-bar-{{ ai_gen_id }}__item ai-info-bar-{{ ai_gen_id }}__promotion">
+      {% if block.settings.promotion_icon %}
+        <img class="ai-info-bar-{{ ai_gen_id }}__icon" src="{{ block.settings.promotion_icon | image_url: width: 80 }}" alt="{{ block.settings.promotion_icon.alt | escape }}" width="22" height="22" loading="lazy">
+      {% else %}
+        <span class="ai-info-bar-{{ ai_gen_id }}__icon-placeholder">{{ 'image' | placeholder_svg_tag }}</span>
+      {% endif %}
+      <span>{{ block.settings.promotion_text }} <span class="ai-info-bar-{{ ai_gen_id }}__highlight">{{ block.settings.promotion_highlight }}</span></span>
+    </div>
+    <div class="ai-info-bar-{{ ai_gen_id }}__item ai-info-bar-{{ ai_gen_id }}__datetime" aria-live="polite">
+      <span data-date></span><span data-separator> · </span><span data-time></span>
+    </div>
+  </div>
+</info-bar-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class InfoBar{{ ai_gen_id }} extends HTMLElement {
+      connectedCallback() {
+        this.date = this.querySelector('[data-date]');
+        this.time = this.querySelector('[data-time]');
+        this.updateDateTime();
+        this.timer = window.setInterval(() => this.updateDateTime(), 1000);
+      }
+      disconnectedCallback() {
+        window.clearInterval(this.timer);
+      }
+      updateDateTime_OLD() {
+        const now = new Date();
+        this.date.textContent = new Intl.DateTimeFormat(undefined, { day: '2-digit', month: 'short', year: 'numeric' }).format(now);
+        this.time.textContent = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(now);
+      }
+
+      updateDateTime() {
+        const now = new Date();
+
+        const weekday = now.toLocaleString('en-US', { weekday: 'long' });
+        const month = now.toLocaleString('en-US', { month: 'long' });
+        const day = now.getDate();
+        const year = now.getFullYear();
+
+        const time = now.toLocaleString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        });
+
+        this.date.textContent = `${weekday}, ${month} ${day}, ${year} - ${time}`;
+      }
+
+    }
+    if (!customElements.get('info-bar-{{ ai_gen_id }}')) customElements.define('info-bar-{{ ai_gen_id }}', InfoBar{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Top info bar",
+  "settings": [
+    { "type": "header", "content": "Messages" },
+    { "type": "text", "id": "welcome_text", "label": "Welcome text", "default": "Welcome to" },
+    { "type": "text", "id": "store_name", "label": "Store name", "default": "My Store" },
+    { "type": "text", "id": "promotion_text", "label": "Promotion text", "default": "FREE SHIPPING" },
+    { "type": "text", "id": "promotion_highlight", "label": "Promotion highlight", "default": "WORLDWIDE" },
+    { "type": "image_picker", "id": "promotion_icon", "label": "Promotion icon" },
+    { "type": "text", "id": "timezone_label", "label": "Timezone label", "default": "WIB" },
+    { "type": "header", "content": "Appearance" },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "text_size", "label": "Text size", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 12 },
+    { "type": "range", "id": "mobile_text_size", "label": "Mobile text size", "min": 9, "max": 16, "step": 1, "unit": "px", "default": 10 },
+    { "type": "font_picker", "id": "font", "label": "Font", "default": "inter_n4" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#FFFFFF" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#000000" },
+    { "type": "color", "id": "accent_color", "label": "Highlight", "default": "#B42318" },
+    { "type": "color", "id": "border_color", "label": "Borders", "default": "#DFDFDF" }
+  ],
+  "presets": [{ "name": "Top info bar" }],
+  "tag": null,
+  "class": "top-info-bar-block"
+}
+{% endschema %}

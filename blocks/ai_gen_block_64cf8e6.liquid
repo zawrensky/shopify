@@ -1,0 +1,67 @@
+{% doc %}
+  @prompt
+    flexbox menu, get the menu with selectors from contents > menus , each menu item have divider vertical line with divider color settings, and have option style underline with underline color settings, and have other style options like font size, text color, and background color section, at Typography setting please add text style uppercase/normal option
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-flex-menu-{{ ai_gen_id }} { display: block; width: 100%; background-color: {{ block.settings.background_color }}; color: {{ block.settings.text_color }}; }
+  .ai-flex-menu-{{ ai_gen_id }}__nav { display: flex; width: {{ block.settings.desktop_width_percent }}%; max-width: 100%; margin: 0 auto; align-items: center; justify-content: {{ block.settings.alignment }}; flex-wrap: wrap; }
+  .ai-flex-menu-{{ ai_gen_id }}__list { display: flex; align-items: center; justify-content: {{ block.settings.alignment }}; width: 100%; margin: 0; padding: 0; list-style: none; }
+  .ai-flex-menu-{{ ai_gen_id }}__item { display: flex; align-items: center; }
+  .ai-flex-menu-{{ ai_gen_id }}__item:not(:last-child)::after { content: ''; display: block; width: {{ block.settings.divider_width }}px; height: {{ block.settings.divider_height }}px; margin: 0 {{ block.settings.item_gap }}px; background-color: {{ block.settings.divider_color }}; }
+  .ai-flex-menu-{{ ai_gen_id }}__link {font-family: 'ChiKareGo2'; display: inline-block; padding: {{ block.settings.vertical_padding }}px 0; color: {{ block.settings.text_color }}; font-size: {{ block.settings.font_size }}px; font-weight: {{ block.settings.font_weight }}; line-height: 1.3; text-transform: {{ block.settings.text_transform }}; text-decoration: none; text-underline-offset: {{ block.settings.underline_offset }}px; transition: color 0.2s ease; }
+  .ai-flex-menu-{{ ai_gen_id }}__link:hover, .ai-flex-menu-{{ ai_gen_id }}__link:focus-visible { color: {{ block.settings.hover_text_color }}; }
+  {% if block.settings.link_style == 'underline' %}.ai-flex-menu-{{ ai_gen_id }}__link { text-decoration-line: underline; text-decoration-color: {{ block.settings.underline_color }}; text-decoration-thickness: {{ block.settings.underline_width }}px; }{% endif %}
+  @media screen and (max-width: 749px) { .ai-flex-menu-{{ ai_gen_id }}__nav, .ai-flex-menu-{{ ai_gen_id }}__list { justify-content: {{ block.settings.mobile_alignment }}; } .ai-flex-menu-{{ ai_gen_id }}__list { flex-wrap: wrap; row-gap: 4px; } .ai-flex-menu-{{ ai_gen_id }}__item:not(:last-child)::after { margin-left: {{ block.settings.mobile_item_gap }}px; margin-right: {{ block.settings.mobile_item_gap }}px; } }
+{% endstyle %}
+
+<div class="ai-flex-menu-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <nav class="ai-flex-menu-{{ ai_gen_id }}__nav" aria-label="{{ block.settings.aria_label | escape }}">
+    {% if block.settings.menu != blank %}
+      <ul class="ai-flex-menu-{{ ai_gen_id }}__list">
+        {% for link in block.settings.menu.links %}
+          <li class="ai-flex-menu-{{ ai_gen_id }}__item"><a class="ai-flex-menu-{{ ai_gen_id }}__link" href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title | escape }}</a></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Select a menu to display navigation links.</p>
+    {% endif %}
+  </nav>
+</div>
+
+{% schema %}
+{
+  "name": "Flexbox menu",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu" },
+    { "type": "text", "id": "aria_label", "label": "Navigation label", "default": "Main navigation" },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "select", "id": "alignment", "label": "Alignment", "options": [{ "value": "flex-start", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "flex-end", "label": "Right" }, { "value": "space-between", "label": "Space between" }], "default": "center" },
+    { "type": "select", "id": "mobile_alignment", "label": "Mobile alignment", "options": [{ "value": "flex-start", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "flex-end", "label": "Right" }], "default": "center" },
+    { "type": "header", "content": "Typography" },
+    { "type": "range", "id": "font_size", "label": "Font size", "min": 10, "max": 32, "step": 1, "unit": "px", "default": 14 },
+    { "type": "select", "id": "font_weight", "label": "Weight", "options": [{ "value": "400", "label": "Regular" }, { "value": "500", "label": "Medium" }, { "value": "600", "label": "Semibold" }, { "value": "700", "label": "Bold" }], "default": "400" },
+    { "type": "select", "id": "text_transform", "label": "Text style", "options": [{ "value": "none", "label": "Normal" }, { "value": "uppercase", "label": "Uppercase" }], "default": "none" },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#000000" },
+    { "type": "color", "id": "hover_text_color", "label": "Hover text", "default": "#333333" },
+    { "type": "header", "content": "Dividers" },
+    { "type": "color", "id": "divider_color", "label": "Color", "default": "#dfdfdf" },
+    { "type": "range", "id": "divider_width", "label": "Width", "min": 1, "max": 4, "step": 1, "unit": "px", "default": 1 },
+    { "type": "range", "id": "divider_height", "label": "Height", "min": 10, "max": 40, "step": 2, "unit": "px", "default": 18 },
+    { "type": "range", "id": "item_gap", "label": "Item gap", "min": 4, "max": 40, "step": 2, "unit": "px", "default": 16 },
+    { "type": "range", "id": "mobile_item_gap", "label": "Mobile gap", "min": 4, "max": 24, "step": 2, "unit": "px", "default": 10 },
+    { "type": "header", "content": "Underline" },
+    { "type": "select", "id": "link_style", "label": "Style", "options": [{ "value": "plain", "label": "Plain" }, { "value": "underline", "label": "Underline" }], "default": "plain" },
+    { "type": "color", "id": "underline_color", "label": "Color", "default": "#000000" },
+    { "type": "range", "id": "underline_width", "label": "Width", "min": 1, "max": 4, "step": 1, "unit": "px", "default": 1 },
+    { "type": "range", "id": "underline_offset", "label": "Offset", "min": 1, "max": 8, "step": 1, "unit": "px", "default": 3 },
+    { "type": "range", "id": "vertical_padding", "label": "Vertical padding", "min": 4, "max": 32, "step": 2, "unit": "px", "default": 12 }
+  ],
+  "presets": [{ "name": "Flexbox menu" }],
+  "tag": null,
+  "class": "flexbox-menu-block"
+}
+{% endschema %}

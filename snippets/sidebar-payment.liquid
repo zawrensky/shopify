@@ -1,0 +1,76 @@
+{% assign pm_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+  .sidebar-pm-{{ pm_id }} {
+    display: block;
+    width: 100%;
+    border: 1px solid {{ block.settings.border_color }};
+    background: {{ block.settings.bg_color }};
+    box-sizing: border-box;
+  }
+  .sidebar-pm-{{ pm_id }}__heading {
+    width: 100%;
+    line-height: 40px;
+    background: {{ block.settings.header_bg }};
+    color: {{ block.settings.header_text }};
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .sidebar-pm-{{ pm_id }}__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: {{ block.settings.gap }}px;
+    padding: {{ block.settings.padding }}px;
+    justify-content: {{ block.settings.alignment }};
+    box-sizing: border-box;
+  }
+  .sidebar-pm-{{ pm_id }}__item {
+    width: calc(50% - {{ block.settings.gap }}px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* padding: 6px; */
+    box-sizing: border-box;
+    min-height: 48px;
+  }
+  .sidebar-pm-{{ pm_id }}__item img {
+    max-width: 100%;
+    /* max-height: 48px; */
+    object-fit: contain;
+    display: block;
+  }
+  .sidebar-pm-{{ pm_id }}__item span {
+    font-size: 12px;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+  }
+{% endstyle %}
+
+<div class="sidebar-pm-{{ pm_id }}" {{ block.shopify_attributes }}>
+  <h3 class="sidebar-pm-{{ pm_id }}__heading">{{ block.settings.heading | escape }}</h3>
+  <div class="sidebar-pm-{{ pm_id }}__grid">
+    {% for i in (1..10) %}
+      {% assign img_key = 'pm_image_' | append: i %}
+      {% assign label_key = 'pm_label_' | append: i %}
+      {% assign img = block.settings[img_key] %}
+      {% assign label = block.settings[label_key] %}
+      {% if img != blank %}
+        <div class="sidebar-pm-{{ pm_id }}__item">
+            <img
+                src="{{ img | image_url: width: 200 }}"
+               alt="{{ label | default: img.alt | escape }}"
+               loading="lazy"
+            />
+        </div>
+      {% elsif label != blank %}
+        <div class="sidebar-pm-{{ pm_id }}__item">
+          <span>{{ label | escape }}</span>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

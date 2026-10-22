@@ -1,0 +1,87 @@
+{% assign nl_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+  .sidebar-nl-{{ nl_id }} {
+    display: block;
+    width: 100%;
+    border: 1px solid {{ block.settings.border_color }};
+    background: {{ block.settings.bg_color }};
+    box-sizing: border-box;
+  }
+  .sidebar-nl-{{ nl_id }}__heading {
+    width: 100%;
+    line-height: 40px;
+    background: {{ block.settings.header_bg }};
+    color: {{ block.settings.header_text }};
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .sidebar-nl-{{ nl_id }}__body {
+    padding: 16px;
+  }
+  .sidebar-nl-{{ nl_id }} label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .sidebar-nl-{{ nl_id }} input[type="email"] {
+    display: block;
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+  }
+  .sidebar-nl-{{ nl_id }}__btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: {{ block.settings.btn_bg }};
+    color: {{ block.settings.btn_text }};
+    font-family: 'ChiKareGo2';
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+  }
+  .sidebar-nl-{{ nl_id }}__btn:hover {
+    opacity: 0.9;
+  }
+  .sidebar-nl-{{ nl_id }}__success {
+    font-size: 13px;
+    color: #2e7d32;
+    text-align: center;
+    padding: 8px 0;
+  }
+{% endstyle %}
+
+<div class="sidebar-nl-{{ nl_id }}" {{ block.shopify_attributes }}>
+  <h3 class="sidebar-nl-{{ nl_id }}__heading">{{ block.settings.heading | escape }}</h3>
+  <div class="sidebar-nl-{{ nl_id }}__body">
+    {% assign form_id = 'sidebar-nl-form-' | append: nl_id %}
+        {% form 'customer', id: form_id %}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            {% if form.posted_successfully? %}
+                <p class="sidebar-nl-{{ nl_id }}__success">✓ Thanks for subscribing!</p>
+            {% else %}
+                <label for="sidebar-nl-email-{{ nl_id }}">{{ block.settings.label_text }}</label>
+                <input type="email"
+                    id="sidebar-nl-email-{{ nl_id }}"
+                    name="contact[email]"
+                    placeholder="{{ block.settings.placeholder }}"
+                    required>
+                <button type="submit" class="sidebar-nl-{{ nl_id }}__btn">
+                {{ block.settings.btn_label | escape }}
+                </button>
+            {% endif %}
+        {% endform %}
+  </div>
+</div>
