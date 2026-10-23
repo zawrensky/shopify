@@ -148,7 +148,7 @@
   {% endif %}
 
   <div
-    class="
+    class="facets-block-border
       {% if should_show_pane == false %}
         hidden
       {% endif %}
@@ -1298,6 +1298,10 @@
     border-inline-start: var(--style-border-width) solid rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
     height: var(--font-paragraph--size);
     position: absolute;
+  }
+
+  .facets-block-border{
+    border: 1.13px solid  #8588B0
   }
 {% endstylesheet %}
 
