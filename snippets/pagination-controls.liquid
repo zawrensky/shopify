@@ -164,8 +164,8 @@
 {% stylesheet %}
   .pagination {
     --pagination-size: 36px;
-    --pagination-inset: 2px;
-    --pagination-radius: 6;
+    --pagination-inset: 0;
+    --pagination-radius: 0;
 
     display: flex;
     justify-content: center;
@@ -173,6 +173,7 @@
     margin-top: var(--padding-xl);
     position: relative;
     isolation: isolate;
+    border: 1.13px solid  #8588B0
   }
 
   .pagination__list {
