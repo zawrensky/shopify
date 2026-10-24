@@ -223,14 +223,14 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 8
+            "padding-inline-end": 0
           },
           "blocks": {
             "card-gallery": {
               "type": "_product-card-gallery",
               "settings": {
                 "image_ratio": "square",
-                "border": "solid",
+                "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
                 "border_color": "#8588b0",
