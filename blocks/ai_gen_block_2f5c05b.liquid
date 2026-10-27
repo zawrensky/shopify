@@ -33,18 +33,21 @@
     color: inherit;
     font-family: inherit;
     font-size: {{ block.settings.title_size }}px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    line-height: 1.15;
-    text-transform: uppercase;
+    font-weight: 500;
+    line-height: 100%;
+    letter-spacing: 0%;
+
   }
 
   .ai-retro-banner-{{ ai_gen_id }}__copy {
     margin-top: 4px;
     color: inherit;
-    font-family: inherit;
     font-size: {{ block.settings.body_size }}px;
-    line-height: 1.2;
+    font-family: 'ChiKareGo2';
+    font-weight: 500;
+    line-height: 100%;
+    letter-spacing: 0%;
+
   }
 
   .ai-retro-banner-{{ ai_gen_id }}__link {
@@ -132,10 +135,10 @@
       "id": "title_size",
       "label": "Title size",
       "min": 8,
-      "max": 20,
+      "max": 28,
       "step": 1,
       "unit": "px",
-      "default": 11
+      "default": 20
     },
     {
       "type": "range",
@@ -145,7 +148,7 @@
       "max": 18,
       "step": 1,
       "unit": "px",
-      "default": 10
+      "default": 16
     },
     {
       "type": "range",
