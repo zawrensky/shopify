@@ -365,6 +365,21 @@
         "padding-block-end": 0
       }
     },
+    "divider_PiFNe3": {
+      "type": "divider",
+      "name": "t:names.divider_section",
+      "settings": {
+        "background_color": "",
+        "divider_color": "",
+        "section_width": "full-width",
+        "thickness": 0.5,
+        "corner_radius": "square",
+        "width_percent": 100,
+        "alignment_horizontal": "center",
+        "padding-block-start": 15,
+        "padding-block-end": 15
+      }
+    },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",
       "blocks": {
@@ -503,7 +518,7 @@
         "section_width": "full-width",
         "gap": 28,
         "background_color": "#ffffff",
-        "padding-block-start": 48,
+        "padding-block-start": 0,
         "padding-block-end": 48
       }
     }
@@ -511,6 +526,7 @@
   "order": [
     "main",
     "blocks_rppEnf",
+    "divider_PiFNe3",
     "product_recommendations_qggXJq"
   ]
 }
