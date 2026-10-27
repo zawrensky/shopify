@@ -1862,7 +1862,7 @@ main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
 }
 .product-information_heading{
   color: #FFFFFF;
-  background:#06149B;
+  background: #06149B;
   font-family: "ChiKareGo2";
   font-weight: 500;
   font-size: 24px;
@@ -1872,4 +1872,8 @@ main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
 }
 .product-information_content{
   padding:18px;
+}
+.theme-drawer__header{
+  background: #06149B;
+  color: #FFFFFF;
 }
