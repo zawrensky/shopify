@@ -1895,6 +1895,6 @@ main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
 .drawer__title{
   color: #FFFFFF;
 }
-  .resource-list-grid{
+.resource-list-grid{
     padding: 0 18px;
-  } 
+} 
