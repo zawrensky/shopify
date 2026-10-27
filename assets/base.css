@@ -1875,5 +1875,9 @@ main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
 }
 .theme-drawer__header{
   background: #06149B;
-  color: #FFFFFF;
+  
+}
+.theme-drawer__header >
+.drawer__title{
+color: #FFFFFF;
 }
