@@ -617,7 +617,7 @@
                     "blog_source": "news",
                     "article_count": 3,
                     "desktop_columns": 3,
-                    "image_height": 95,
+                    "image_height": 90,
                     "article_gap": 6,
                     "read_more_text": "» Read More",
                     "read_more_fontsize": 12,
