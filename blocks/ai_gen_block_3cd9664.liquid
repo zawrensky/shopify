@@ -20,7 +20,7 @@
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
 {% style %}
   .ai-brands-{{ ai_gen_id }} { display:block; width:100%; max-width:{{ block.settings.max_width }}px; margin-inline:auto; background:{{ block.settings.section_background }}; border:1px solid {{ block.settings.border_color }}; padding:{{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px; box-sizing:border-box; }
-  .ai-brands-{{ ai_gen_id }}__heading { width:100%; margin:0 0 24px; padding:0 18px; background:{{ block.settings.header_background }}; color:{{ block.settings.header_text_color }}; font-size:{{ block.settings.heading_size }}px; font-weight:500; line-height:40px; text-align:{{ block.settings.heading_alignment }}; letter-spacing:.08em; box-sizing:border-box; }
+  .ai-brands-{{ ai_gen_id }}__heading { width:100%; margin:0 0 16px; padding:0 18px; background:{{ block.settings.header_background }}; color:{{ block.settings.header_text_color }}; font-size:{{ block.settings.heading_size }}px; font-weight:500; line-height:40px; text-align:{{ block.settings.heading_alignment }}; letter-spacing:.08em; box-sizing:border-box; }
   .ai-brands-{{ ai_gen_id }}__grid { display:flex; flex-direction: row; flex-wrap: wrap; gap:{{ block.settings.logo_gap }}px; justify-content: {{ block.settings.logo_alignment}}; }
   .ai-brands-{{ ai_gen_id }}__item { min-width:30%; display:flex; align-items:center; justify-content:center; box-sizing:border-box; }
   .ai-brands-{{ ai_gen_id }}__item a { display:flex; width:100%; height:100%; min-height:64px; align-items:center; justify-content:center; }
