@@ -624,7 +624,7 @@
                     "card_background": "#ffffff",
                     "card_border": "#8588b0",
                     "article_title_color": "#102a4c",
-                    "article_title_fontsize": 11,
+                    "article_title_fontsize": 16,
                     "read_more_color": "#164e8a",
                     "desktop_width_percent": 100
                   },
