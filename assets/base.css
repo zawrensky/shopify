@@ -1893,5 +1893,8 @@ main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
 }
 .theme-drawer__header >
 .drawer__title{
-color: #FFFFFF;
+  color: #FFFFFF;
 }
+  .resource-list-grid{
+    padding: 0 18px;
+  } 
