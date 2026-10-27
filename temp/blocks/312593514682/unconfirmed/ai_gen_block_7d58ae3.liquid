@@ -1,0 +1,205 @@
+{% doc %}
+  @prompt
+    Buat banner horizontal yang menyerupai referensi ini: bidang persegi panjang biru royal gelap (#0019A8), border tipis cyan terang (#56CAFF) dengan efek garis inset halus, sudut siku tanpa radius. Lebar mengikuti container, tinggi desktop sekitar 50px, padding horizontal 12px dan vertikal 9px. Semua teks putih rata kiri, memakai gaya font pixel/retro monospace. Judul kecil uppercase 'FIND YOUR NEXT FAVOURITE.' sekitar 11px, tebal, letter spacing 0.5px. Di bawahnya teks lebih kecil sekitar 10px 'Need a hand? Visit us in store or get in touch. »' dengan jarak antarbari sekitar 4px. Pertahankan tampilan minimal dan padat, tanpa gambar, ikon tambahan, atau animasi. Responsif di ponsel: teks bisa membungkus, tinggi otomatis dan padding tetap nyaman. Sediakan pengaturan yang bisa diedit untuk judul, teks pendukung, tautan opsional, warna latar, warna teks, warna border, ukuran font, padding, serta margin atas dan bawah. Tautan jangan diberi tujuan fiktif; bila belum diisi tampilkan teks biasa.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-retro-banner-{{ ai_gen_id }} {
+    display: block;
+    box-sizing: border-box;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin-top: {{ block.settings.margin_top }}px;
+    margin-bottom: {{ block.settings.margin_bottom }}px;
+    padding: {{ block.settings.vertical_padding }}px {{ block.settings.horizontal_padding }}px;
+    background-color: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+    border: 1px solid {{ block.settings.border_color }};
+    border-radius: 0;
+    box-shadow: inset 0 0 0 1px rgba(86, 202, 255, 0.22);
+    font-family: 'Anonymous Pro', 'Courier New', monospace;
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
+
+  .ai-retro-banner-{{ ai_gen_id }}__title {
+    display: block;
+    margin: 0;
+    color: inherit;
+    font-family: inherit;
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.15;
+    text-transform: uppercase;
+  }
+
+  .ai-retro-banner-{{ ai_gen_id }}__copy {
+    margin-top: 4px;
+    color: inherit;
+    font-family: inherit;
+    font-size: {{ block.settings.body_size }}px;
+    line-height: 1.2;
+  }
+
+  .ai-retro-banner-{{ ai_gen_id }}__link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .ai-retro-banner-{{ ai_gen_id }}__link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-retro-banner-{{ ai_gen_id }} {
+      width: 100%;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-retro-banner-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.title != blank %}
+    <div class="ai-retro-banner-{{ ai_gen_id }}__title">{{ block.settings.title | escape }}</div>
+  {% endif %}
+  {% if block.settings.supporting_text != blank %}
+    <div class="ai-retro-banner-{{ ai_gen_id }}__copy">
+      {% if block.settings.banner_link != blank %}
+        <a class="ai-retro-banner-{{ ai_gen_id }}__link" href="{{ block.settings.banner_link }}">{{ block.settings.supporting_text | escape }}</a>
+      {% else %}
+        {{ block.settings.supporting_text | escape }}
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Retro help banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "FIND YOUR NEXT FAVOURITE."
+    },
+    {
+      "type": "text",
+      "id": "supporting_text",
+      "label": "Supporting text",
+      "default": "Need a hand? Visit us in store or get in touch. »"
+    },
+    {
+      "type": "url",
+      "id": "banner_link",
+      "label": "Optional link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#0019A8"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border",
+      "default": "#56CAFF"
+    },
+    {
+      "type": "header",
+      "content": "Typography and spacing"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "label": "Text size",
+      "min": 8,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "vertical_padding",
+      "label": "Vertical padding",
+      "min": 4,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 9
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Top margin",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "Retro help banner"
+    }
+  ],
+  "tag": null,
+  "class": "retro-help-banner"
+}
+{% endschema %}
