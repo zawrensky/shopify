@@ -543,7 +543,7 @@
                 "view_all_text": "VIEW ALL >>",
                 "link_font": "mono",
                 "link_size": 18,
-                "link_size_mobile": 11,
+                "link_size_mobile": 12,
                 "view_all_url": "shopify://collections",
                 "collection": "frontpage",
                 "product_limit": 10,
@@ -559,7 +559,7 @@
                 "header_link_color": "#ffffff",
                 "card_background": "#ffffff",
                 "card_border_color": "#dfdfdf",
-                "product_title_color": "#000000",
+                "product_title_color": "#06149B",
                 "product_price_color": "#EA080C"
               },
               "blocks": {}
