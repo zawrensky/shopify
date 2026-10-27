@@ -44,6 +44,7 @@ html[scroll-lock] .page-wrapper {
   flex-direction: column;
   min-height: 100dvh;
   transition: margin-inline-end var(--animation-speed) var(--animation-timing-fade-out);
+  padding: 20px;
 }
 
 @media (min-width: 990px) {
