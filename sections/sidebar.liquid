@@ -1,39 +1,3 @@
-<div class="sidebar-left" style="width: {{ section.settings.sidebar_width }}px; background: {{ section.settings.bg_color }};">
-  {% for block in section.blocks %}
-    <div class="sidebar-block" {{ block.shopify_attributes }}>
-      {% case block.type %}
-        {% when 'nav_links' %}
-          <nav class="sidebar-nav">
-            <h3>{{ block.settings.title }}</h3>
-            <ul>
-              {% assign links = linklists[block.settings.menu] %}
-              {% for link in links.links %}
-                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-              {% endfor %}
-            </ul>
-          </nav>
-        {% when 'member_login' %}
-            {% render 'sidebar-login', block: block %}
-        
-        {% when 'newsletter' %}
-          {% render 'sidebar-newsletter', block: block %}
-
-        {% when 'payment_method' %}
-          {% render 'sidebar-payment', block: block %}
-
-        {% when 'store_info' %}
-          {% render 'sidebar-store-info', block: block %}
-        
-        {% when 'visitor_counter' %}
-          {% render 'sidebar-counter', block: block %}
-
-        {% when '@app' %}
-          {% render block %}
-      {% endcase %}
-    </div>
-  {% endfor %}
-</div>
-
 <style>
   .sidebar-left {
     position: relative;
@@ -74,6 +38,42 @@
     .sidebar-left { display: none; }
   }
 </style>
+
+<div class="sidebar-left" style="width: {{ section.settings.sidebar_width }}px; background: {{ section.settings.bg_color }};">
+  {% for block in section.blocks %}
+    <div class="sidebar-block" {{ block.shopify_attributes }}>
+      {% case block.type %}
+        {% when 'nav_links' %}
+          <nav class="sidebar-nav">
+            <h3>{{ block.settings.title }}</h3>
+            <ul>
+              {% assign links = linklists[block.settings.menu] %}
+              {% for link in links.links %}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </nav>
+        {% when 'member_login' %}
+            {% render 'sidebar-login', block: block %}
+        
+        {% when 'newsletter' %}
+          {% render 'sidebar-newsletter', block: block %}
+
+        {% when 'payment_method' %}
+          {% render 'sidebar-payment', block: block %}
+
+        {% when 'store_info' %}
+          {% render 'sidebar-store-info', block: block %}
+        
+        {% when 'visitor_counter' %}
+          {% render 'sidebar-counter', block: block %}
+
+        {% when '@app' %}
+          {% render block %}
+      {% endcase %}
+    </div>
+  {% endfor %}
+</div>
 
 {% schema %}
 {
