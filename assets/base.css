@@ -249,17 +249,6 @@ p:empty {
   outline-offset: calc(var(--focus-outline-width) * -1);
 }
 
-/* Layout */
-.content-for-layout {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.content-for-layout > .shopify-section:last-child {
-  flex-grow: 1;
-}
-
 /* Set up page widths & margins. Gutters grow to the device safe-area insets (viewport-fit=cover)
    so section backgrounds bleed edge-to-edge while content stays clear of the notch; taking the
    larger of both insets keeps the centered page grid symmetric. */
@@ -1839,15 +1828,39 @@ main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
   }
 }
 
+/* Layout */
 .global-layout {
   display: grid;
-  grid-template-columns: 270px 1fr;
+  grid-template-columns: 270px minmax(0, 1fr);
   gap: 1rem;
   align-items: start;
 }
-@media (max-width: 768px) {
-  .global-layout { grid-template-columns: 1fr; }
+
+.global-layout > * {
+  min-width: 0;
 }
+
+.global-layout > .content-for-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+.content-for-layout > .shopify-section {
+  min-width: 0;
+}
+
+.content-for-layout > .shopify-section:last-child {
+  flex-grow: 1;
+}
+
+@media (max-width: 768px) {
+  .global-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .clear{
   clear:both;
 }
