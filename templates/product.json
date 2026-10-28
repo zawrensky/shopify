@@ -519,7 +519,24 @@
         "gap": 28,
         "background_color": "#ffffff",
         "padding-block-start": 0,
-        "padding-block-end": 25
+        "padding-block-end": 25,
+        "padding-inline-start": 18,
+        "padding-inline-end": 18
+      }
+    },
+    "divider_KhkXjY": {
+      "type": "divider",
+      "name": "t:names.divider_section",
+      "settings": {
+        "background_color": "",
+        "divider_color": "{{ settings.color_palette.background }}",
+        "section_width": "full-width",
+        "thickness": 0.5,
+        "corner_radius": "square",
+        "width_percent": 100,
+        "alignment_horizontal": "center",
+        "padding-block-start": 11,
+        "padding-block-end": 11
       }
     }
   },
@@ -527,6 +544,7 @@
     "main",
     "blocks_rppEnf",
     "divider_PiFNe3",
-    "product_recommendations_qggXJq"
+    "product_recommendations_qggXJq",
+    "divider_KhkXjY"
   ]
 }
