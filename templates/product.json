@@ -520,8 +520,8 @@
         "background_color": "#ffffff",
         "padding-block-start": 0,
         "padding-block-end": 25,
-        "padding-inline-start": 18,
-        "padding-inline-end": 18
+        "padding-inline-start": 0,
+        "padding-inline-end": 0
       }
     },
     "divider_KhkXjY": {
