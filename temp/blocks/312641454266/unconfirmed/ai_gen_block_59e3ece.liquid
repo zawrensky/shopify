@@ -1,6 +1,220 @@
+{% doc %}
+  @prompt
+    Buat blok custom Featured Post untuk halaman blog Journal dengan desain retro pixel editorial, mengikuti gambar referensi.
+    
+    DESAIN UTAMA
+    - Kartu persegi panjang berlatar putih.
+    - Border #8588B0 tipis 1px, tanpa sudut membulat dan tanpa bayangan.
+    - Header strip biru navy/royal blue #06149B memenuhi lebar kartu.
+    - Teks header putih dengan font-family: ChiKareGo2; font-weight: 500; font-size: 24px; line-height: 29.25px; letter-spacing: 0%; : “== FEATURED STORY ==”, rata kiri.
+    
+    LAYOUT DESKTOP
+    - Dua kolom hampir sama lebar.
+    - Kiri: gambar artikel besar dengan crop landscape.
+    - Kanan: konten dengan padding lega, berisi:
+      - Kategori kecil merah #EA080C, uppercase,font-family: ChiKareGo2; font-weight: 500; font-size: 16.88px; line-height: 22.5px; letter-spacing: 0%;.
+      - Judul besar navy #06149B, uppercase, font-family: ChiKareGo2; font-weight: 500; font-size: 40px; line-height: 43.88px; letter-spacing: 0%;.
+      - Ringkasan kecil berwarna gelap #151515, font-family: Pixolde; font-weight: 500; font-size: 20.25px; line-height: 25.88px; letter-spacing: 0%;.
+      - Tombol persegi biru #06149B dengan tulisan putih “READ STORY >>” font-family: ChiKareGo2; font-weight: 500; font-size: 20px; line-height: 23.63px; letter-spacing: 0%; text-align: center;.
+    - Jaga proporsi dan jarak agar menyerupai referensi.
+    
+    LAYOUT MOBILE
+    - Gambar di atas, konten di bawah.
+    - Ukuran judul dan padding menyesuaikan layar.
+    - Tombol mudah ditekan dan tidak ada horizontal overflow.
+    
+    KONTEN ARTIKEL DINAMIS
+    - Sediakan article picker untuk memilih artikel Shopify.
+    - Gambar, judul, ringkasan, dan tautan tombol otomatis mengikuti artikel terpilih.
+    - Judul dan tombol mengarah ke halaman artikel terpilih.
+    - Kategori dapat diisi manual atau menggunakan tag artikel pertama.
+    - Gunakan gambar artikel asli, bukan screenshot referensi sebagai gambar konten.
+    
+    PENGATURAN DI THEME EDITOR
+    - Artikel pilihan.
+    - Override gambar, judul, dan ringkasan.
+    - Teks header, kategori, dan label tombol.
+    - Warna header, background, border, judul, kategori, dan tombol.
+    - Ukuran font.
+    - Padding.
+    - Lebar konten.
+    - Rasio gambar.
+    - Jarak antarkolom.
+    
+    Semua pengaturan harus benar-benar terhubung ke tampilan, bukan sekadar kontrol yang tidak berfungsi.
+    
+    Tampilan awal mengikuti referensi featured story bersepeda: border #8588B0, header #06149B, gambar di kiri, kategori merah #EA080C, dan judul #06149B di kanan. Pastikan aksesibel dan responsif.
+    
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign featured_article = block.settings.featured_article %}
+{% assign featured_image = block.settings.image_override | default: featured_article.image %}
+{% assign featured_title = block.settings.title_override | default: featured_article.title %}
+{% assign featured_excerpt = block.settings.excerpt_override | default: featured_article.excerpt_or_content | strip_html | truncate: 180 %}
+{% assign featured_category = block.settings.category %}
+{% if featured_category == blank and featured_article.tags.size > 0 %}{% assign featured_category = featured_article.tags.first %}{% endif %}
+{% assign featured_url = featured_article.url %}
+{% style %}
+  .ai-featured-post-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    background: {{ block.settings.background_color }};
+    border: 1px solid {{ block.settings.border_color }};
+    color: #151515;
+    overflow: hidden;
+  }
+  .ai-featured-post-{{ ai_gen_id }}__header {
+    margin: 0;
+    padding: 12px {{ block.settings.padding }}px;
+    background: {{ block.settings.header_color }};
+    color: #fff;
+    font-family: {{ block.settings.display_font }}, monospace;
+    font-size: {{ block.settings.header_size }}px;
+    font-weight: 500;
+    line-height: 1.22;
+  }
+  .ai-featured-post-{{ ai_gen_id }}__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, {{ block.settings.content_width }}fr);
+    gap: {{ block.settings.column_gap }}px;
+    align-items: stretch;
+  }
+  .ai-featured-post-{{ ai_gen_id }}__media {
+    position: relative;
+    min-width: 0;
+    aspect-ratio: {{ block.settings.image_ratio }};
+    background: #f0f0f0;
+  }
+  .ai-featured-post-{{ ai_gen_id }}__media img,
+  .ai-featured-post-{{ ai_gen_id }}__media svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ai-featured-post-{{ ai_gen_id }}__copy {
+    min-width: 0;
+    padding: {{ block.settings.padding }}px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .ai-featured-post-{{ ai_gen_id }}__category {
+    margin: 0 0 12px;
+    color: {{ block.settings.category_color }};
+    font-family: {{ block.settings.display_font }}, monospace;
+    font-size: {{ block.settings.category_size }}px;
+    font-weight: 500;
+    line-height: 1.33;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+  .ai-featured-post-{{ ai_gen_id }}__title {
+    margin: 0 0 16px;
+    color: {{ block.settings.title_color }};
+    font-family: {{ block.settings.display_font }}, monospace;
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 500;
+    line-height: 1.1;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+  .ai-featured-post-{{ ai_gen_id }}__title a { color: inherit; text-decoration: none; }
+  .ai-featured-post-{{ ai_gen_id }}__title a:focus-visible,
+  .ai-featured-post-{{ ai_gen_id }}__button:focus-visible { outline: 3px solid {{ block.settings.category_color }}; outline-offset: 3px; }
+  .ai-featured-post-{{ ai_gen_id }}__excerpt {
+    margin: 0 0 24px;
+    color: #151515;
+    font-family: {{ block.settings.body_font }}, monospace;
+    font-size: {{ block.settings.excerpt_size }}px;
+    font-weight: 500;
+    line-height: 1.28;
+    overflow-wrap: anywhere;
+  }
+  .ai-featured-post-{{ ai_gen_id }}__button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 48px;
+    padding: 12px 20px;
+    background: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    font-family: {{ block.settings.display_font }}, monospace;
+    font-size: {{ block.settings.button_size }}px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .ai-featured-post-{{ ai_gen_id }}__button:hover { filter: brightness(.88); }
+  @media screen and (max-width: 749px) {
+    .ai-featured-post-{{ ai_gen_id }} { width: 100%; }
+    .ai-featured-post-{{ ai_gen_id }}__header { padding: 10px 14px; }
+    .ai-featured-post-{{ ai_gen_id }}__body { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .ai-featured-post-{{ ai_gen_id }}__media { aspect-ratio: {{ block.settings.image_ratio }}; }
+    .ai-featured-post-{{ ai_gen_id }}__copy { padding: {{ block.settings.mobile_padding }}px; }
+    .ai-featured-post-{{ ai_gen_id }}__title { font-size: min({{ block.settings.title_size }}px, 9vw); }
+    .ai-featured-post-{{ ai_gen_id }}__button { width: 100%; min-height: 48px; }
+  }
+{% endstyle %}
+<article class="ai-featured-post-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <h2 class="ai-featured-post-{{ ai_gen_id }}__header">{{ block.settings.header_text | escape }}</h2>
+  <div class="ai-featured-post-{{ ai_gen_id }}__body">
+    <div class="ai-featured-post-{{ ai_gen_id }}__media">
+      {% if featured_image != blank %}
+        {{ featured_image | image_url: width: 1600 | image_tag: loading: 'lazy', alt: featured_image.alt | default: featured_title | escape }}
+      {% else %}
+        <div class="ai-featured-post-{{ ai_gen_id }}__placeholder">{{ 'image' | placeholder_svg_tag }}</div>
+      {% endif %}
+    </div>
+    <div class="ai-featured-post-{{ ai_gen_id }}__copy">
+      {% if featured_category != blank %}<p class="ai-featured-post-{{ ai_gen_id }}__category">{{ featured_category | escape }}</p>{% endif %}
+      {% if featured_title != blank %}<h3 class="ai-featured-post-{{ ai_gen_id }}__title"><a href="{{ featured_url | default: '#' }}">{{ featured_title | escape }}</a></h3>{% endif %}
+      {% if featured_excerpt != blank %}<p class="ai-featured-post-{{ ai_gen_id }}__excerpt">{{ featured_excerpt | escape }}</p>{% endif %}
+      {% if featured_article != blank %}<a class="ai-featured-post-{{ ai_gen_id }}__button" href="{{ featured_url }}">{{ block.settings.button_label | escape }}</a>{% else %}<span class="ai-featured-post-{{ ai_gen_id }}__button">{{ block.settings.button_label | escape }}</span>{% endif %}
+    </div>
+  </div>
+</article>
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Featured post pixel",
+  "settings": [
+    { "type": "article", "id": "featured_article", "label": "Featured article" },
+    { "type": "image_picker", "id": "image_override", "label": "Image override" },
+    { "type": "text", "id": "title_override", "label": "Title override" },
+    { "type": "textarea", "id": "excerpt_override", "label": "Excerpt override" },
+    { "type": "text", "id": "header_text", "label": "Header text", "default": "== FEATURED STORY ==" },
+    { "type": "text", "id": "category", "label": "Category override" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "READ STORY >>" },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "header_color", "label": "Header", "default": "#06149B" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#FFFFFF" },
+    { "type": "color", "id": "border_color", "label": "Border", "default": "#8588B0" },
+    { "type": "color", "id": "title_color", "label": "Title", "default": "#06149B" },
+    { "type": "color", "id": "category_color", "label": "Category", "default": "#EA080C" },
+    { "type": "color", "id": "button_color", "label": "Button", "default": "#06149B" },
+    { "type": "color", "id": "button_text_color", "label": "Button text", "default": "#FFFFFF" },
+    { "type": "header", "content": "Typography" },
+    { "type": "text", "id": "display_font", "label": "Display font stack", "default": "ChiKareGo2" },
+    { "type": "text", "id": "body_font", "label": "Body font stack", "default": "Pixolde" },
+    { "type": "range", "id": "header_size", "label": "Header size", "min": 14, "max": 32, "step": 1, "unit": "px", "default": 24 },
+    { "type": "range", "id": "category_size", "label": "Category size", "min": 12, "max": 24, "step": 1, "unit": "px", "default": 17 },
+    { "type": "range", "id": "title_size", "label": "Title size", "min": 20, "max": 56, "step": 1, "unit": "px", "default": 40 },
+    { "type": "range", "id": "excerpt_size", "label": "Excerpt size", "min": 14, "max": 26, "step": 1, "unit": "px", "default": 20 },
+    { "type": "range", "id": "button_size", "label": "Button size", "min": 14, "max": 28, "step": 1, "unit": "px", "default": 20 },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "content_width", "label": "Content column weight", "min": 8, "max": 12, "step": 1, "default": 10 },
+    { "type": "range", "id": "padding", "label": "Content padding", "min": 12, "max": 64, "step": 4, "unit": "px", "default": 36 },
+    { "type": "range", "id": "mobile_padding", "label": "Mobile padding", "min": 12, "max": 40, "step": 4, "unit": "px", "default": 20 },
+    { "type": "range", "id": "column_gap", "label": "Column gap", "min": 0, "max": 48, "step": 4, "unit": "px", "default": 24 },
+    { "type": "select", "id": "image_ratio", "label": "Image ratio", "options": [{ "value": "4 / 3", "label": "Landscape 4:3" }, { "value": "16 / 9", "label": "Wide 16:9" }, { "value": "3 / 2", "label": "Landscape 3:2" }], "default": "4 / 3" }
+  ],
+  "presets": [{ "name": "Featured post pixel" }],
+  "tag": null,
+  "class": "featured-post-pixel"
+}
 {% endschema %}
