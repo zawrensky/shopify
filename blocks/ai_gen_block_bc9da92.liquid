@@ -157,11 +157,11 @@
     <div class="ai-our-story-{{ ai_gen_id }}__media">
       {% if block.settings.image != blank %}
         <img class="ai-our-story-{{ ai_gen_id }}__image" src="{{ block.settings.image | image_url: width: 1600 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}">
-      {% else %}
+      {% comment %} {% else %}
         <div class="ai-our-story-{{ ai_gen_id }}__placeholder">
           {{ 'image' | placeholder_svg_tag }}
           <div class="ai-our-story-{{ ai_gen_id }}__empty-state">Add an image to tell your brand story.</div>
-        </div>
+        </div> {% endcomment %}
       {% endif %}
     </div>
   </div>
