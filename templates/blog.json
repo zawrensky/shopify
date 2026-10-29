@@ -479,72 +479,6 @@
         "padding-block-end": 11
       }
     },
-    "blocks_KnXWWA": {
-      "type": "_blocks",
-      "blocks": {
-        "ai_gen_block_bc9da92_4BUkx8": {
-          "type": "ai_gen_block_bc9da92",
-          "settings": {
-            "block_padding": "25px 25px 30px",
-            "layout_gap": 28,
-            "header_title": "OUR STORY",
-            "header_background_color": "#06149B",
-            "header_text_color": "#FFFFFF",
-            "copy_width": 60,
-            "headline": "{{ closest.blog.title }}",
-            "headline_style": "uppercase",
-            "headline_color": "#06149B",
-            "headline_size": 32,
-            "body_text": "<p>We believe every ride is a chance to go further. Our cycling essentials are made for the miles, the moments, and the people who make the journey worth it.</p><p>Designed with purpose and built to move, we bring performance-minded style to every adventure.</p>",
-            "body_size": 16,
-            "media_width": 40,
-            "image_position": "right",
-            "background_color": "#FFFFFF",
-            "text_color": "#151515",
-            "cta_size": 14,
-            "cta_text": "",
-            "cta_url": "",
-            "cta_background_color": "#06149B",
-            "cta_text_color": "#FFFFFF",
-            "cta_padding": "6px 30px",
-            "desktop_width_percent": 100
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "ai_gen_block_bc9da92_4BUkx8"
-      ],
-      "name": "Our story article",
-      "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_color": "",
-        "border_radius": 0,
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
-    },
     "main": {
       "type": "main-blog",
       "blocks": {
@@ -663,10 +597,80 @@
       "block_order": [
         "title"
       ],
+      "disabled": true,
       "settings": {
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 0,
         "padding-block-end": 48
+      }
+    },
+    "17932639453d74e9d6": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_59e3ece_8rrYbY": {
+          "type": "ai_gen_block_59e3ece",
+          "settings": {
+            "featured_article": "journal/5-track-sepeda-terbaik-di-indonesia",
+            "image_override": "{{ closest.article.image }}",
+            "title_override": "",
+            "excerpt_override": "",
+            "header_text": "== FEATURED STORY ==",
+            "category": "",
+            "button_label": "READ STORY >>",
+            "header_color": "#06149B",
+            "background_color": "#FFFFFF",
+            "border_color": "#8588B0",
+            "title_color": "#06149B",
+            "category_color": "#EA080C",
+            "button_color": "#06149B",
+            "button_text_color": "#FFFFFF",
+            "display_font": "ChiKareGo2",
+            "body_font": "Pixolde",
+            "header_size": 24,
+            "category_size": 17,
+            "title_size": 40,
+            "excerpt_size": 20,
+            "button_size": 20,
+            "desktop_width_percent": 100,
+            "content_width": 10,
+            "padding": 36,
+            "mobile_padding": 20,
+            "column_gap": 24,
+            "image_ratio": "4 / 3"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_59e3ece_8rrYbY"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "full-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     }
   },
@@ -676,7 +680,7 @@
     "divider_z84yVT",
     "section_BUJyDw",
     "divider_ePYUqC",
-    "blocks_KnXWWA",
-    "main"
+    "main",
+    "17932639453d74e9d6"
   ]
 }
