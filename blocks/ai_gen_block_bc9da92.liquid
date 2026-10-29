@@ -154,16 +154,19 @@
         </div>
       {% endif %}
     </div>
-    <div class="ai-our-story-{{ ai_gen_id }}__media">
-      {% if block.settings.image != blank %}
+    
+    {% if block.settings.image != blank %}
+      <div class="ai-our-story-{{ ai_gen_id }}__media">
+      
         <img class="ai-our-story-{{ ai_gen_id }}__image" src="{{ block.settings.image | image_url: width: 1600 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}">
       {% comment %} {% else %}
         <div class="ai-our-story-{{ ai_gen_id }}__placeholder">
           {{ 'image' | placeholder_svg_tag }}
           <div class="ai-our-story-{{ ai_gen_id }}__empty-state">Add an image to tell your brand story.</div>
         </div> {% endcomment %}
-      {% endif %}
-    </div>
+      
+      </div>
+    {% endif %}
   </div>
 </div>
 

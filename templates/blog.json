@@ -6,8 +6,125 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
+    "blocks_pLUFGT": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_168c69c_bfRAka": {
+          "type": "ai_gen_block_168c69c",
+          "settings": {
+            "desktop_width_percent": 100,
+            "home_label": "Home",
+            "search_label": "Search",
+            "cart_label": "Cart",
+            "font_size": 12,
+            "text_color": "#142B4A",
+            "muted_color": "#52647A"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_168c69c_bfRAka"
+      ],
+      "name": "Breadcrumb navigation",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "full-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 10,
+        "padding-block-end": 0
+      }
+    },
+    "blocks_h9EKW7": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_bc9da92_98GzEn": {
+          "type": "ai_gen_block_bc9da92",
+          "settings": {
+            "block_padding": "25px 25px 30px",
+            "layout_gap": 28,
+            "header_title": "OUR STORY",
+            "header_background_color": "#06149B",
+            "header_text_color": "#FFFFFF",
+            "copy_width": 60,
+            "headline": "More than a destination. \n A reason to get out and ride.",
+            "headline_style": "uppercase",
+            "headline_color": "#06149B",
+            "headline_size": 32,
+            "body_text": "<p>We believe every ride is a chance to go further. Our cycling essentials are made for the miles, the moments, and the people who make the journey worth it.</p><p>Designed with purpose and built to move, we bring performance-minded style to every adventure.</p>",
+            "body_size": 16,
+            "media_width": 40,
+            "image_position": "right",
+            "background_color": "#FFFFFF",
+            "text_color": "#151515",
+            "cta_size": 14,
+            "cta_text": "",
+            "cta_url": "",
+            "cta_background_color": "#06149B",
+            "cta_text_color": "#FFFFFF",
+            "cta_padding": "6px 30px",
+            "desktop_width_percent": 100
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_bc9da92_98GzEn"
+      ],
+      "name": "Our story article",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "full-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
     "main": {
       "type": "main-blog",
       "blocks": {
@@ -16,15 +133,17 @@
           "name": "t:names.title",
           "settings": {
             "text": "<h1>{{ closest.blog.title }}</h1>",
-            "width": "fit-content",
+            "width": "100%",
             "max_width": "narrow",
             "alignment": "left",
             "type_preset": "h2",
             "font": "var(--font-body--family)",
+            "font_size": "1rem",
             "line_height": "normal",
             "letter_spacing": "normal",
             "case": "none",
             "wrap": "pretty",
+            "text_color": "",
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
@@ -39,9 +158,23 @@
           "type": "_blog-post-card",
           "static": true,
           "settings": {
-            "alignment": "left"
+            "alignment": "left",
+            "background_color": ""
           },
           "blocks": {
+            "image": {
+              "type": "_blog-post-image",
+              "static": true,
+              "settings": {
+                "height": "large",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 4
+              },
+              "blocks": {}
+            },
             "heading": {
               "type": "_heading",
               "name": "t:names.title",
@@ -49,13 +182,16 @@
               "settings": {
                 "type_preset": "h4",
                 "font": "var(--font-body--family)",
+                "font_size": "1rem",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
                 "wrap": "pretty",
+                "text": "",
                 "read_only": true,
                 "alignment": "left",
                 "show_alignment": false,
+                "text_color": "",
                 "padding-block-start": 0,
                 "padding-block-end": 10,
                 "padding-inline-start": 0,
@@ -70,22 +206,33 @@
               "settings": {
                 "show_date": true,
                 "show_author": false,
+                "type_preset": "",
                 "alignment": "left",
+                "text_color": "",
                 "show_alignment": false,
                 "padding-block-start": 0,
-                "padding-block-end": 0
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
               },
               "blocks": {}
             },
-            "image": {
-              "type": "_blog-post-image",
+            "content": {
+              "type": "_blog-post-description",
               "static": true,
               "settings": {
-                "height": "large",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 4
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "padding-block-start": 16,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
               },
               "blocks": {}
             }
@@ -104,6 +251,8 @@
     }
   },
   "order": [
+    "blocks_pLUFGT",
+    "blocks_h9EKW7",
     "main"
   ]
 }
