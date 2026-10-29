@@ -614,7 +614,7 @@
                     "view_all_text": "VIEW ALL >>",
                     "view_all_url": "",
                     "view_all_color": "#ffffff",
-                    "blog_source": "news",
+                    "blog_source": "blog-journal",
                     "article_count": 3,
                     "desktop_columns": 3,
                     "image_height": 90,
