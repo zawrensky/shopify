@@ -632,7 +632,7 @@
             "button_size": 20,
             "desktop_width_percent": 100,
             "content_width": 8,
-            "padding": 36,
+            "padding": 20,
             "mobile_padding": 20,
             "column_gap": 24,
             "image_ratio": "4 / 3"
