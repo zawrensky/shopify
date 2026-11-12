@@ -612,7 +612,7 @@
                     "header_background": "#06149b",
                     "header_text_color": "#ffffff",
                     "view_all_text": "VIEW ALL >>",
-                    "view_all_url": "",
+                    "view_all_url": "shopify://blogs/journal",
                     "view_all_color": "#ffffff",
                     "blog_source": "journal",
                     "article_count": 3,
