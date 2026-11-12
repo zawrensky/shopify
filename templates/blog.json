@@ -631,7 +631,7 @@
             "excerpt_size": 20,
             "button_size": 20,
             "desktop_width_percent": 100,
-            "content_width": 10,
+            "content_width": 8,
             "padding": 36,
             "mobile_padding": 20,
             "column_gap": 24,
