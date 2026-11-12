@@ -76,7 +76,7 @@
   }
   .ai-featured-post-{{ ai_gen_id }}__body {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, {{ block.settings.content_width }}fr);
+    grid-template-columns: minmax(0, {{ block.settings.content_width }}fr) minmax(0, {{ block.settings.content_width }}fr);
     gap: {{ block.settings.column_gap }}px;
     align-items: stretch;
   }
@@ -207,7 +207,7 @@
     { "type": "range", "id": "button_size", "label": "Button size", "min": 14, "max": 28, "step": 1, "unit": "px", "default": 20 },
     { "type": "header", "content": "Layout" },
     { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
-    { "type": "range", "id": "content_width", "label": "Content column weight", "min": 8, "max": 12, "step": 1, "default": 10 },
+    { "type": "range", "id": "content_width", "label": "Content column weight", "min": 5, "max": 12, "step": 1, "default": 10 },
     { "type": "range", "id": "padding", "label": "Content padding", "min": 12, "max": 64, "step": 4, "unit": "px", "default": 36 },
     { "type": "range", "id": "mobile_padding", "label": "Mobile padding", "min": 12, "max": 40, "step": 4, "unit": "px", "default": 20 },
     { "type": "range", "id": "column_gap", "label": "Column gap", "min": 0, "max": 48, "step": 4, "unit": "px", "default": 24 },
