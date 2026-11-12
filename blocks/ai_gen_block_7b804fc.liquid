@@ -189,7 +189,9 @@
           </a>
           <div class="ai-news-{{ ai_gen_id }}__body">
             <h3 class="ai-news-{{ ai_gen_id }}__title">{{ article.title | escape }}</h3>
-            {{ article.excerpt }}
+            {% if block.settings.show_excerpt == 'Yes' %}
+              <p>{{ article.excerpt }}</p>
+             {% endif %}
             <a class="ai-news-{{ ai_gen_id }}__read-link" href="{{ article.url }}">{{ block.settings.read_more_text | escape }}</a>
           </div>
         </article>
