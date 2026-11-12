@@ -78,6 +78,7 @@
     display: grid;
     grid-template-columns: minmax(0, {{ block.settings.content_width }}fr) minmax(0, {{ block.settings.content_width }}fr);
     gap: {{ block.settings.column_gap }}px;
+    padding: {{ block.settings.padding }}px;
     align-items: stretch;
   }
   .ai-featured-post-{{ ai_gen_id }}__media {
@@ -95,7 +96,6 @@
   }
   .ai-featured-post-{{ ai_gen_id }}__copy {
     min-width: 0;
-    padding: {{ block.settings.padding }}px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
