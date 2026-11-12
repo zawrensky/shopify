@@ -52,7 +52,9 @@
 {% assign featured_title = block.settings.title_override | default: featured_article.title %}
 {% assign featured_excerpt = block.settings.excerpt_override | default: featured_article.excerpt_or_content | strip_html | truncate: 180 %}
 {% assign featured_category = block.settings.category %}
-{% if featured_category == blank and featured_article.tags.size > 0 %}{% assign featured_category = featured_article.tags.first %}{% endif %}
+{% if featured_category == blank and featured_article.tags.size > 0 %}
+ {% assign featured_category = featured_article.tags.first%} 
+{% endif %}
 {% assign featured_url = featured_article.url %}
 {% style %}
   .ai-featured-post-{{ ai_gen_id }} {
