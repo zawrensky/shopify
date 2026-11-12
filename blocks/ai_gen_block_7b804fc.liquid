@@ -189,6 +189,7 @@
           </a>
           <div class="ai-news-{{ ai_gen_id }}__body">
             <h3 class="ai-news-{{ ai_gen_id }}__title">{{ article.title | escape }}</h3>
+            {{ article.excerpt }}
             <a class="ai-news-{{ ai_gen_id }}__read-link" href="{{ article.url }}">{{ block.settings.read_more_text | escape }}</a>
           </div>
         </article>
@@ -224,7 +225,8 @@
     { "type": "color", "id": "article_title_color", "label": "Article title", "default": "#102A4C" },
     { "type": "range", "id": "article_title_fontsize", "label": "Title font size", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 12 },
     { "type": "color", "id": "read_more_color", "label": "Read more link", "default": "#164E8A" },
-    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 }
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "select", "id": "show_excerpt", "label": "Show excerpt", "options": [{ "value": "Yes", "label": "Yes" }, { "value": "No", "label": "No" }], "default": "No" }
   ],
   "presets": [
     { "name": "News article grid" }
