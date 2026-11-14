@@ -140,6 +140,60 @@
         "padding-block-end": 8
       }
     },
+    "1794636075c0e5e126": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_ae63c2e_QKCHVR": {
+          "type": "ai_gen_block_ae63c2e",
+          "settings": {
+            "all_label": "All Stories",
+            "tag_order": "",
+            "nav_font": "anonymous_pro_n4",
+            "desktop_width_percent": 100,
+            "text_size": 18,
+            "horizontal_padding": 8,
+            "item_gap": 12,
+            "background_color": "#FFFFFF",
+            "text_color": "#06149B",
+            "border_color": "#8588B0",
+            "active_color": "#06149B",
+            "hover_color": "#000000"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_ae63c2e_QKCHVR"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "full-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
     "section_BUJyDw": {
       "type": "section",
       "blocks": {
@@ -434,6 +488,7 @@
         "group_JVPjFh",
         "group_mqdKEc"
       ],
+      "disabled": true,
       "name": "t:names.multicolumn",
       "settings": {
         "content_direction": "row",
@@ -881,6 +936,7 @@
     "blocks_pLUFGT",
     "blocks_h9EKW7",
     "divider_z84yVT",
+    "1794636075c0e5e126",
     "section_BUJyDw",
     "divider_ePYUqC",
     "main",
