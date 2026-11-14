@@ -652,7 +652,6 @@
       "block_order": [
         "title"
       ],
-      "disabled": true,
       "settings": {
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 0,
