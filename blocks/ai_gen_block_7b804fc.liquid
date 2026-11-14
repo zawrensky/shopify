@@ -182,10 +182,15 @@
       <span class="ai-news-{{ ai_gen_id }}__all-link">{{ block.settings.view_all_text | escape }}</span>
     {% endif %}
   </div>
-
+{% comment %} 
   {% if news_blog != blank and news_blog.articles_count > 0 %}
     <div class="ai-news-{{ ai_gen_id }}__grid">
       {% for article in news_blog.articles limit: block.settings.article_count %}
+        {% endcomment %}
+  {% if news_blog != blank %}
+    {% paginate news_blog.articles by block.settings.article_count %}
+      <div class="ai-news-{{ ai_gen_id }}__grid">
+        {% for article in news_blog.articles %}
         <article class="ai-news-{{ ai_gen_id }}__card">
           <a class="ai-news-{{ ai_gen_id }}__media" href="{{ article.url }}" aria-label="{{ article.title | escape }}">
             {% if article.image %}
@@ -202,11 +207,32 @@
             <a class="ai-news-{{ ai_gen_id }}__read-link" href="{{ article.url }}">{{ block.settings.read_more_text | escape }}</a>
           </div>
         </article>
+              {% else %}
+          <div class="ai-news-{{ ai_gen_id }}__empty">
+            Belum ada artikel untuk kategori ini.
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if paginate.pages > 1 %}
+        <div class="ai-news-{{ ai_gen_id }}__pagination">
+          {{ paginate | default_pagination }}
+        </div>
+      {% endif %}
+    {% endpaginate %}
+  {% else %}
+    <div class="ai-news-{{ ai_gen_id }}__empty">
+      Pilih blog yang berisi artikel untuk menampilkan berita di sini.
+    </div>
+  {% endif %}
+{% comment %}    
       {% endfor %}
     </div>
   {% else %}
     <div class="ai-news-{{ ai_gen_id }}__empty">Pilih blog yang berisi artikel untuk menampilkan berita di sini.</div>
-  {% endif %}
+  {% endif %} {% endcomment %}
+
+
 </div>
 
 {% schema %}
