@@ -38,7 +38,14 @@
     Tampilan bersih bergaya toko olahraga/cycling. Kartu tersusun rapi dalam grid dengan jarak yang konsisten, tambahkan pengaturan jarak antar berita
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
-{% assign news_blog = block.settings.blog_source %}
+{% comment %} {% assign news_blog = block.settings.blog_source %} {% endcomment %}
+ {% liquid
+  assign news_blog = block.settings.blog_source
+
+  if request.page_type == 'blog'
+    assign news_blog = blog
+  endif
+%}
 
 {% style %}
   .ai-news-{{ ai_gen_id }} {
