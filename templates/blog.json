@@ -153,10 +153,10 @@
             "text_size": 18,
             "horizontal_padding": 8,
             "item_gap": 12,
-            "background_color": "#FFFFFF",
-            "text_color": "#06149B",
-            "border_color": "#8588B0",
-            "active_color": "#06149B",
+            "background_color": "#ffffff",
+            "text_color": "#06149b",
+            "border_color": "#8588b0",
+            "active_color": "#06149b",
             "hover_color": "#000000"
           },
           "blocks": {}
@@ -601,7 +601,7 @@
                 "read_only": true,
                 "alignment": "left",
                 "show_alignment": false,
-                "text_color": "#102A4C",
+                "text_color": "#102a4c",
                 "padding-block-start": 0,
                 "padding-block-end": 6,
                 "padding-inline-start": 0,
@@ -653,6 +653,7 @@
       "block_order": [
         "title"
       ],
+      "disabled": true,
       "settings": {
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 0,
