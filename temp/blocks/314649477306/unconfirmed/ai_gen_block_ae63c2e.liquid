@@ -1,6 +1,154 @@
+{% doc %}
+  @prompt
+    Buat blok navigasi kategori/tag untuk halaman blog Journal sesuai referensi: satu bar horizontal putih yang tipis, border abu-abu 1px, sudut persegi, teks navy uppercase bergaya retro monospace, tanpa chip atau tombol berwarna.
+    
+    Item pertama “ALL STORIES” selalu mengarah ke URL blog aktif tanpa filter tag sehingga menampilkan seluruh artikel dari semua tag. Setelahnya tampilkan tag blog sebagai tautan ke halaman blog aktif yang difilter tag tersebut, dengan URL tag yang benar.
+    
+    Ambil data dari blog aktif dan daftar tag blog secara dinamis, bukan hanya tag artikel aktif. Jangan membuat tag fiktif. Urutan visual yang diinginkan adalah ALL STORIES, RIDE GUIDES, KIT CARE, COMMUNITY jika tag tersebut memang ada.
+    
+    Sediakan pengaturan opsional untuk memilih daftar nama tag yang ditampilkan dan urutannya; cocokkan hanya dengan tag yang benar-benar ada dan abaikan nama yang tidak ditemukan. Default tampilkan semua tag blog.
+    
+    Sebar item secara merata pada desktop, beri padding horizontal yang nyaman dan tinggi bar sekitar 34–40px. Pada ponsel izinkan scroll horizontal tanpa scrollbar mencolok dan tanpa overflow halaman.
+    
+    Beri penanda aktif pada All Stories saat tanpa filter dan tag saat filter aktif, serta hover/focus yang jelas dan aksesibel.
+    
+    Sediakan pengaturan label All Stories, warna latar/teks/border/aktif/hover, font, ukuran teks, padding dan jarak. Gunakan link nyata, bukan teks dekoratif. Jangan mengubah blok atau konten lain.
+    
+    Buat blok navigasi kategori/tag untuk halaman blog Journal sesuai referensi: satu bar horizontal putih yang tipis, border abu-abu 1px, sudut persegi, teks navy uppercase bergaya ChiKareGo2 tanpa chip atau tombol berwarna.
+    
+    Item pertama “ALL STORIES” selalu mengarah ke URL blog aktif tanpa filter tag sehingga menampilkan seluruh artikel dari semua tag. Setelahnya tampilkan tag blog sebagai tautan ke halaman blog aktif yang difilter tag tersebut, dengan URL tag yang benar.
+    
+    Ambil data dari blog aktif dan daftar tag blog secara dinamis, bukan hanya tag artikel aktif. Jangan membuat tag fiktif. Urutan visual yang diinginkan adalah ALL STORIES, RIDE GUIDES, KIT CARE, COMMUNITY jika tag tersebut memang ada.
+    
+    Sediakan pengaturan opsional untuk memilih daftar nama tag yang ditampilkan dan urutannya; cocokkan hanya dengan tag yang benar-benar ada dan abaikan nama yang tidak ditemukan. Default tampilkan semua tag blog.
+    
+    Sebar item secara merata pada desktop, beri padding horizontal yang nyaman dan tinggi bar sekitar 34–40px. Pada ponsel izinkan scroll horizontal tanpa scrollbar mencolok dan tanpa overflow halaman.
+    
+    Beri penanda aktif pada All Stories saat tanpa filter dan tag saat filter aktif, serta hover/focus yang jelas dan aksesibel.
+    
+    Sediakan pengaturan label All Stories, warna latar/teks/border/aktif/hover, font, ukuran teks, padding dan jarak. Gunakan link nyata, bukan teks dekoratif. Jangan mengubah blok atau konten lain.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign active_tag = current_tags | first %}
+{% assign default_order = 'RIDE GUIDES,KIT CARE,COMMUNITY' | split: ',' %}
+{% assign custom_order = block.settings.tag_order | split: ',' %}
+
+{% style %}
+  .ai-journal-nav-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    box-sizing: border-box;
+    background: {{ block.settings.background_color }};
+    border: 1px solid {{ block.settings.border_color }};
+    border-radius: 0;
+    overflow: hidden;
+  }
+  .ai-journal-nav-{{ ai_gen_id }}__list {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-evenly;
+    gap: {{ block.settings.item_gap }}px;
+    min-height: 38px;
+    padding: 0 {{ block.settings.horizontal_padding }}px;
+    margin: 0;
+    list-style: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ai-journal-nav-{{ ai_gen_id }}__list::-webkit-scrollbar { display: none; }
+  .ai-journal-nav-{{ ai_gen_id }}__item { display: flex; flex: 0 0 auto; align-items: center; justify-content: center; }
+  .ai-journal-nav-{{ ai_gen_id }}__link {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    color: {{ block.settings.text_color }};
+    font-family: {{ block.settings.nav_font.family }}, {{ block.settings.nav_font.fallback_families }};
+    font-size: {{ block.settings.text_size }}px;
+    font-weight: {{ block.settings.nav_font.weight }};
+    line-height: 1;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+  .ai-journal-nav-{{ ai_gen_id }}__link[aria-current="page"] { color: {{ block.settings.active_color }}; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+  .ai-journal-nav-{{ ai_gen_id }}__link:hover { color: {{ block.settings.hover_color }}; text-decoration: underline; text-underline-offset: 4px; }
+  .ai-journal-nav-{{ ai_gen_id }}__link:focus-visible { outline: 2px solid {{ block.settings.active_color }}; outline-offset: -2px; text-decoration: underline; }
+  @media screen and (max-width: 749px) {
+    .ai-journal-nav-{{ ai_gen_id }} { width: 100%; }
+    .ai-journal-nav-{{ ai_gen_id }}__list { justify-content: flex-start; }
+  }
+{% endstyle %}
+
+<nav class="ai-journal-nav-{{ ai_gen_id }}" aria-label="Navigasi kategori Journal" {{ block.shopify_attributes }}>
+  <ul class="ai-journal-nav-{{ ai_gen_id }}__list">
+    <li class="ai-journal-nav-{{ ai_gen_id }}__item"><a class="ai-journal-nav-{{ ai_gen_id }}__link" href="{{ blog.url }}"{% if active_tag == blank %} aria-current="page"{% endif %}>{{ block.settings.all_label | escape }}</a></li>
+    {% if block.settings.tag_order != blank %}
+      {% for ordered_tag in custom_order %}
+        {% assign wanted_tag = ordered_tag | strip | downcase %}
+        {% for blog_tag in blog.all_tags %}
+          {% assign normalized_tag = blog_tag | downcase %}
+          {% if normalized_tag == wanted_tag %}
+            <li class="ai-journal-nav-{{ ai_gen_id }}__item"><a class="ai-journal-nav-{{ ai_gen_id }}__link" href="{{ blog.url }}/tagged/{{ blog_tag | handle }}"{% if active_tag == blog_tag %} aria-current="page"{% endif %}>{{ blog_tag | escape }}</a></li>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    {% else %}
+      {% for ordered_tag in default_order %}
+        {% assign wanted_tag = ordered_tag | downcase %}
+        {% for blog_tag in blog.all_tags %}
+          {% assign normalized_tag = blog_tag | downcase %}
+          {% if normalized_tag == wanted_tag %}
+            <li class="ai-journal-nav-{{ ai_gen_id }}__item"><a class="ai-journal-nav-{{ ai_gen_id }}__link" href="{{ blog.url }}/tagged/{{ blog_tag | handle }}"{% if active_tag == blog_tag %} aria-current="page"{% endif %}>{{ blog_tag | escape }}</a></li>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    {% endif %}
+    {% for blog_tag in blog.all_tags %}
+      {% assign normalized_tag = blog_tag | downcase %}
+      {% assign is_prioritized = false %}
+      {% if block.settings.tag_order != blank %}
+        {% for ordered_tag in custom_order %}
+          {% assign wanted_tag = ordered_tag | strip | downcase %}
+          {% if wanted_tag == normalized_tag %}{% assign is_prioritized = true %}{% endif %}
+        {% endfor %}
+      {% else %}
+        {% for ordered_tag in default_order %}
+          {% assign wanted_tag = ordered_tag | downcase %}
+          {% if wanted_tag == normalized_tag %}{% assign is_prioritized = true %}{% endif %}
+        {% endfor %}
+      {% endif %}
+      {% unless is_prioritized %}
+        <li class="ai-journal-nav-{{ ai_gen_id }}__item"><a class="ai-journal-nav-{{ ai_gen_id }}__link" href="{{ blog.url }}/tagged/{{ blog_tag | handle }}"{% if active_tag == blog_tag %} aria-current="page"{% endif %}>{{ blog_tag | escape }}</a></li>
+      {% endunless %}
+    {% endfor %}
+  </ul>
+</nav>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Journal tag navigation",
+  "settings": [
+    { "type": "text", "id": "all_label", "label": "Label All Stories", "default": "All Stories" },
+    { "type": "textarea", "id": "tag_order", "label": "Urutan tag opsional", "info": "Pisahkan nama tag dengan koma. Kosongkan untuk menampilkan semua tag dengan urutan pilihan awal." },
+    { "type": "font_picker", "id": "nav_font", "label": "Font navigasi", "default": "anonymous_pro_n4" },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "text_size", "label": "Ukuran teks", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 12 },
+    { "type": "range", "id": "horizontal_padding", "label": "Padding horizontal", "min": 8, "max": 40, "step": 4, "unit": "px", "default": 20 },
+    { "type": "range", "id": "item_gap", "label": "Jarak item", "min": 0, "max": 32, "step": 4, "unit": "px", "default": 12 },
+    { "type": "color", "id": "background_color", "label": "Latar", "default": "#FFFFFF" },
+    { "type": "color", "id": "text_color", "label": "Teks", "default": "#06149B" },
+    { "type": "color", "id": "border_color", "label": "Border", "default": "#8588B0" },
+    { "type": "color", "id": "active_color", "label": "Teks aktif", "default": "#06149B" },
+    { "type": "color", "id": "hover_color", "label": "Teks hover", "default": "#000000" }
+  ],
+  "presets": [{ "name": "Journal tag navigation" }],
+  "tag": null,
+  "class": "journal-tag-navigation"
+}
 {% endschema %}
