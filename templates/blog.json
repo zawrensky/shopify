@@ -768,7 +768,8 @@
             "article_title_fontsize": 12,
             "read_more_color": "#164e8a",
             "desktop_width_percent": 100,
-            "show_excerpt": "Yes"
+            "show_excerpt": "Yes",
+            "show_pagination": "Yes"
           },
           "blocks": {}
         }
