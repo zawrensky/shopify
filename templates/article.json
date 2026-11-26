@@ -93,6 +93,7 @@
         "blog-post-image",
         "blog-post-content"
       ],
+      "disabled": true,
       "settings": {
         "content_direction": "column",
         "gap": 32,
@@ -103,6 +104,25 @@
     },
     "179463376267ce1e12": {
       "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_168c69c_AxRwma": {
+          "type": "ai_gen_block_168c69c",
+          "name": "Breadcrumb navigation",
+          "settings": {
+            "desktop_width_percent": 100,
+            "home_label": "Home",
+            "search_label": "Search",
+            "cart_label": "Cart",
+            "font_size": 12,
+            "text_color": "#142B4A",
+            "muted_color": "#52647A"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_168c69c_AxRwma"
+      ],
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -112,7 +132,7 @@
         "horizontal_alignment_flex_direction_column": "flex-start",
         "vertical_alignment_flex_direction_column": "center",
         "gap": 12,
-        "section_width": "page-width",
+        "section_width": "full-width",
         "section_height": "",
         "section_height_custom": 50,
         "background_media": "none",
@@ -128,7 +148,7 @@
         "border_opacity": 100,
         "border_color": "",
         "border_radius": 0,
-        "padding-block-start": 0,
+        "padding-block-start": 10,
         "padding-block-end": 0
       }
     }
