@@ -114,8 +114,8 @@
             "search_label": "Search",
             "cart_label": "Cart",
             "font_size": 14,
-            "text_color": "#142B4A",
-            "muted_color": "#52647A"
+            "text_color": "#142b4a",
+            "muted_color": "#52647a"
           },
           "blocks": {}
         }
@@ -159,17 +159,16 @@
           "type": "ai_gen_block_fc95619",
           "settings": {
             "desktop_width_percent": 100,
-            "bar_color": "#06149B",
-            "tag_text_color": "#FFFFFF",
-            "title_color": "#06149B",
+            "bar_color": "#06149b",
+            "tag_text_color": "#ffffff",
+            "title_color": "#06149b",
             "meta_color": "#333333",
-            "container_color": "#FFFFFF",
-            "border_color": "#8BC9E8",
+            "container_color": "#ffffff",
+            "border_color": "#8bc9e8",
             "border_width": 1,
-            "heading_font": "anonymous_pro_n4",
             "title_size_desktop": 36,
             "title_size_mobile": 24,
-            "label_size": 13,
+            "label_size": 20,
             "meta_size": 12,
             "padding": 24,
             "meta_spacing": 12,
