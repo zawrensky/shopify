@@ -113,7 +113,7 @@
             "home_label": "Home",
             "search_label": "Search",
             "cart_label": "Cart",
-            "font_size": 12,
+            "font_size": 14,
             "text_color": "#142B4A",
             "muted_color": "#52647A"
           },
