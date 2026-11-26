@@ -1,6 +1,165 @@
+{% doc %}
+  @prompt
+    Ini prompt lengkapnya:
+    
+        Buat blok custom judul artikel blog untuk template artikel, mengikuti gaya retro pixel pada gambar referensi.
+    
+        TAMPILAN
+        - Kontainer putih berbentuk persegi, tanpa sudut membulat, dengan border tipis biru muda.
+        - Bar horizontal biru tua/royal di bagian atas.
+        - Label pada bar berwarna putih, uppercase, menggunakan font retro pixel/monospace.
+        - Format label: == RIDE GUIDES ==, tetapi teks RIDE GUIDES harus berasal dari tag artikel aktif, bukan teks statis.
+        - Di bawah bar, tampilkan judul artikel berwarna biru tua, uppercase, menggunakan font retro pixel/monospace.
+        - Di bawah judul, tampilkan metadata kecil dengan format:
+          Oleh [nama penulis artikel] | [estimasi waktu baca] menit baca
+        - Ikuti komposisi gambar referensi: bar tipis, judul menonjol, metadata kecil, dan padding yang rapi.
+    
+        KONTEN DINAMIS
+        - Ambil label dari article.tags.
+        - Jika ada beberapa tag, gunakan tag pertama.
+        - Tambahkan tanda == sebelum dan sesudah nama tag.
+        - Jika artikel tidak memiliki tag, sembunyikan bar label seluruhnya.
+        - Ambil judul dari article.title.
+        - Ambil penulis dari article.author.
+        - Hitung estimasi waktu baca dari isi article.content setelah tag HTML dihapus, menggunakan kecepatan 200 kata per menit, dibulatkan ke atas, dengan minimum 1 menit.
+        - Jangan hardcode judul contoh, nama tag, penulis, atau waktu baca.
+        - Gunakan artikel yang sedang dibuka di preview, bukan artikel tertentu yang dipilih secara permanen.
+    
+        PENGATURAN THEME EDITOR
+        Sediakan pengaturan yang benar-benar terhubung ke tampilan untuk:
+        - Warna latar bar.
+        - Warna teks label tag.
+        - Warna judul.
+        - Warna metadata.
+        - Warna latar kontainer.
+        - Warna dan ketebalan border.
+        - Font judul dan label, dengan gaya awal retro pixel/monospace.
+        - Ukuran font judul desktop dan mobile.
+        - Ukuran font label dan metadata.
+        - Padding kontainer.
+        - Jarak antara judul dan metadata.
+        - Toggle tampilkan/sembunyikan penulis.
+        - Toggle tampilkan/sembunyikan estimasi waktu baca.
+    
+        RESPONSIVE DAN LINGKUP
+        - Kontainer mengikuti lebar area konten.
+        - Judul panjang harus membungkus dengan rapi di mobile tanpa overflow.
+        - Metadata boleh membungkus pada layar kecil.
+        - Gunakan struktur heading yang sesuai untuk judul utama artikel.
+        - Buat hanya header artikel: label tag, judul, dan metadata.
+        - Jangan menambahkan isi artikel, gambar, atau konten contoh.
+        - Jangan mengubah header situs, navigasi, maupun bagian artikel lainnya.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign ai_article = article %}
+{% if ai_article == blank %}{% assign ai_article = closest.article %}{% endif %}
+{% if ai_article != blank %}
+  {% assign ai_reading_text = ai_article.content | strip_html | strip %}
+  {% assign ai_word_count = ai_reading_text | split: ' ' | size %}
+  {% assign ai_reading_minutes = ai_word_count | plus: 199 | divided_by: 200 | at_least: 1 %}
+  {% assign ai_first_tag = ai_article.tags | first %}
+{% endif %}
+
+{% style %}
+  .ai-article-heading-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    background: {{ block.settings.container_color }};
+    border: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
+    border-radius: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .ai-article-heading-{{ ai_gen_id }}__tag {
+    display: block;
+    padding: 8px {{ block.settings.padding }}px;
+    background: {{ block.settings.bar_color }};
+    color: {{ block.settings.tag_text_color }};
+    font-family: {{ block.settings.heading_font.family }}, monospace;
+    font-size: {{ block.settings.label_size }}px;
+    line-height: 1.35;
+    font-weight: 700;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+  .ai-article-heading-{{ ai_gen_id }}__content {
+    padding: {{ block.settings.padding }}px;
+  }
+  .ai-article-heading-{{ ai_gen_id }}__title {
+    margin: 0;
+    color: {{ block.settings.title_color }};
+    font-family: {{ block.settings.heading_font.family }}, monospace;
+    font-size: {{ block.settings.title_size_desktop }}px;
+    font-weight: {{ block.settings.heading_font.weight }};
+    line-height: 1.2;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+  .ai-article-heading-{{ ai_gen_id }}__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    margin-top: {{ block.settings.meta_spacing }}px;
+    color: {{ block.settings.meta_color }};
+    font-family: {{ block.settings.heading_font.family }}, monospace;
+    font-size: {{ block.settings.meta_size }}px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+  @media screen and (max-width: 749px) {
+    .ai-article-heading-{{ ai_gen_id }}__title { font-size: {{ block.settings.title_size_mobile }}px; }
+    .ai-article-heading-{{ ai_gen_id }}__tag,
+    .ai-article-heading-{{ ai_gen_id }}__content { padding-left: {{ block.settings.padding | times: 0.75 }}px; padding-right: {{ block.settings.padding | times: 0.75 }}px; }
+  }
+{% endstyle %}
+
+<div class="ai-article-heading-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if ai_article != blank %}
+    {% if ai_first_tag != blank %}
+      <div class="ai-article-heading-{{ ai_gen_id }}__tag" aria-label="Article category">== {{ ai_first_tag | escape }} ==</div>
+    {% endif %}
+    <div class="ai-article-heading-{{ ai_gen_id }}__content">
+      <h1 class="ai-article-heading-{{ ai_gen_id }}__title">{{ ai_article.title | escape }}</h1>
+      {% if block.settings.show_author or block.settings.show_reading_time %}
+        <div class="ai-article-heading-{{ ai_gen_id }}__meta">
+          {% if block.settings.show_author %}<span>Oleh {{ ai_article.author | escape }}</span>{% endif %}
+          {% if block.settings.show_author and block.settings.show_reading_time %}<span aria-hidden="true">|</span>{% endif %}
+          {% if block.settings.show_reading_time %}<span>{{ ai_reading_minutes }} menit baca</span>{% endif %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Judul artikel pixel",
+  "settings": [
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bar_color", "label": "Bar background", "default": "#06149B" },
+    { "type": "color", "id": "tag_text_color", "label": "Tag text", "default": "#FFFFFF" },
+    { "type": "color", "id": "title_color", "label": "Title", "default": "#06149B" },
+    { "type": "color", "id": "meta_color", "label": "Metadata", "default": "#333333" },
+    { "type": "color", "id": "container_color", "label": "Container background", "default": "#FFFFFF" },
+    { "type": "color", "id": "border_color", "label": "Border", "default": "#8BC9E8" },
+    { "type": "range", "id": "border_width", "label": "Border thickness", "min": 1, "max": 5, "step": 1, "unit": "px", "default": 1 },
+    { "type": "header", "content": "Typography" },
+    { "type": "font_picker", "id": "heading_font", "label": "Title and label font", "default": "anonymous_pro_n4" },
+    { "type": "range", "id": "title_size_desktop", "label": "Title size desktop", "min": 20, "max": 60, "step": 2, "unit": "px", "default": 36 },
+    { "type": "range", "id": "title_size_mobile", "label": "Title size mobile", "min": 16, "max": 40, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "label_size", "label": "Label size", "min": 10, "max": 20, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "meta_size", "label": "Metadata size", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 12 },
+    { "type": "range", "id": "padding", "label": "Container padding", "min": 8, "max": 48, "step": 4, "unit": "px", "default": 24 },
+    { "type": "range", "id": "meta_spacing", "label": "Title to metadata gap", "min": 4, "max": 32, "step": 2, "unit": "px", "default": 12 },
+    { "type": "header", "content": "Article metadata" },
+    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": true },
+    { "type": "checkbox", "id": "show_reading_time", "label": "Show reading time", "default": true }
+  ],
+  "presets": [{ "name": "Judul artikel pixel" }],
+  "tag": null,
+  "class": "article-pixel-heading"
+}
 {% endschema %}
