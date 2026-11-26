@@ -206,8 +206,8 @@
         "border_opacity": 100,
         "border_color": "",
         "border_radius": 0,
-        "padding-block-start": 10,
-        "padding-block-end": 0
+        "padding-block-start": 20,
+        "padding-block-end": 20
       }
     },
     "hero_pdNkbe": {
