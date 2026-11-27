@@ -1,6 +1,218 @@
+{% doc %}
+  @prompt
+    Saya akan lihat referensinya, lalu siapkan blok navigasi kembali ke jurnal dan tombol berbagi artikel dengan gaya yang sama.
+    
+    Prompt sudah disiapkan: “« BACK TO JOURNAL” di kiri dan “SHARE: COPY LINK | WHATSAPP” di kanan, dengan border tipis dan font retro seperti gambar. Belum ada perubahan pada tema; klik tautan ini untuk membuat bloknya.
+    
+    Berikut prompt lengkapnya:
+    
+        Buat blok navigasi dan share artikel untuk template artikel blog, mengikuti gambar referensi.
+    
+        TAMPILAN
+        - Satu bar horizontal minimalis dengan latar putih.
+        - Border tipis abu-abu, sudut persegi, tanpa shadow.
+        - Teks kecil uppercase berwarna navy menggunakan font retro pixel/monospace.
+        - Padding awal sekitar 16px horizontal dan 18px vertikal.
+        - Desktop: link “« BACK TO JOURNAL” di kiri.
+        - Di kanan tampilkan “SHARE: COPY LINK | WHATSAPP”.
+        - Kedua sisi berjauhan dan rata tengah secara vertikal.
+    
+        NAVIGASI KEMBALI
+        - Gunakan blog.url dari konteks artikel aktif.
+        - Jangan hardcode /blogs/journal.
+        - Label kembali dapat diedit di Theme Editor.
+    
+        COPY LINK
+        - Gunakan elemen button yang tampil seperti link teks.
+        - Salin URL kanonis absolut artikel aktif, bukan URL Theme Editor atau URL preview dengan parameter.
+        - Gunakan Clipboard API dengan fallback yang aman.
+        - Tampilkan “LINK COPIED” hanya setelah penyalinan berhasil.
+        - Jika gagal, tampilkan pesan kegagalan.
+        - Gunakan aria-live untuk feedback tanpa menggeser layout.
+    
+        WHATSAPP
+        - Buka https://wa.me/?text= dengan pesan berisi judul artikel aktif dan URL kanonis absolutnya.
+        - Encode pesan dengan benar.
+        - Buka di tab baru dengan rel="noopener noreferrer".
+    
+        PENGATURAN THEME EDITOR
+        Sediakan pengaturan yang terhubung ke tampilan untuk:
+        - Warna latar, teks, dan border.
+        - Ketebalan border.
+        - Font dan ukuran font desktop/mobile.
+        - Padding vertikal dan horizontal.
+        - Lebar maksimum kontainer.
+        - Label kembali, SHARE, COPY LINK, dan WHATSAPP.
+        - Pesan penyalinan berhasil dan gagal.
+        - Toggle tampilkan COPY LINK.
+        - Toggle tampilkan WHATSAPP.
+    
+        RESPONSIVE DAN AKSESIBILITAS
+        - Mobile: izinkan wrap rapi atau susun link kembali di atas dan share di bawah.
+        - Tidak boleh ada overflow atau teks bertumpuk.
+        - Gunakan struktur nav, link, dan button yang sesuai.
+        - Sediakan fokus keyboard yang terlihat dan area klik yang cukup besar.
+        - Script dibatasi pada instance blok.
+        - Pastikan tetap bekerja setelah blok dimuat ulang di Theme Editor tanpa listener duplikat.
+    
+        BATASAN
+        - Jangan tambahkan ikon media sosial.
+        - Jangan tambahkan previous/next post.
+        - Jangan tambahkan judul artikel, isi artikel, panel promosi, atau checklist.
+        - Gunakan konteks artikel dan blog aktif secara dinamis.
+        - Jangan buat konten contoh atau tautan palsu.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign canonical_article_url = request.origin | append: article.url %}
+
+{% style %}
+  .ai-journal-nav-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: {{ block.settings.max_width }}px;
+    margin-inline: auto;
+    background: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+    border: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
+    box-sizing: border-box;
+    font-family: {{ block.settings.font_family.family }}, {{ block.settings.font_family.fallback_families }};
+    font-size: {{ block.settings.font_size_desktop }}px;
+    line-height: 1.45;
+  }
+  .ai-journal-nav-{{ ai_gen_id }}__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
+  }
+  .ai-journal-nav-{{ ai_gen_id }}__back,
+  .ai-journal-nav-{{ ai_gen_id }}__share,
+  .ai-journal-nav-{{ ai_gen_id }}__action {
+    color: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    overflow-wrap: anywhere;
+  }
+  .ai-journal-nav-{{ ai_gen_id }}__back { text-decoration: none; padding: 8px 0; }
+  .ai-journal-nav-{{ ai_gen_id }}__share { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px; text-align: right; }
+  .ai-journal-nav-{{ ai_gen_id }}__actions { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .ai-journal-nav-{{ ai_gen_id }}__action {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+    padding: 8px 2px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .ai-journal-nav-{{ ai_gen_id }}__action:hover,
+  .ai-journal-nav-{{ ai_gen_id }}__back:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .ai-journal-nav-{{ ai_gen_id }}__back:focus-visible,
+  .ai-journal-nav-{{ ai_gen_id }}__action:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  .ai-journal-nav-{{ ai_gen_id }}__feedback { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  @media screen and (max-width: 749px) {
+    .ai-journal-nav-{{ ai_gen_id }} { font-size: {{ block.settings.font_size_mobile }}px; }
+    .ai-journal-nav-{{ ai_gen_id }}__inner { flex-direction: column; align-items: stretch; gap: 4px; }
+    .ai-journal-nav-{{ ai_gen_id }}__share { justify-content: flex-start; text-align: left; }
+  }
+{% endstyle %}
+
+<journal-share-{{ ai_gen_id }} class="ai-journal-nav-{{ ai_gen_id }}" data-copy-success="{{ block.settings.copy_success | escape }}" data-copy-failure="{{ block.settings.copy_failure | escape }}" data-copy-label="{{ block.settings.copy_label | escape }}" data-article-url="{{ canonical_article_url | escape }}" {{ block.shopify_attributes }}>
+  {% if article and blog %}
+    <nav class="ai-journal-nav-{{ ai_gen_id }}__inner" aria-label="Article navigation and sharing">
+      <a class="ai-journal-nav-{{ ai_gen_id }}__back" href="{{ blog.url }}">{{ block.settings.back_label | escape }}</a>
+      <div class="ai-journal-nav-{{ ai_gen_id }}__share">
+        <span>{{ block.settings.share_label | escape }}:</span>
+        <span class="ai-journal-nav-{{ ai_gen_id }}__actions">
+          {% if block.settings.show_copy %}
+            <button class="ai-journal-nav-{{ ai_gen_id }}__action" type="button" data-copy>{{ block.settings.copy_label | escape }}</button>
+          {% endif %}
+          {% if block.settings.show_copy and block.settings.show_whatsapp %}<span aria-hidden="true">|</span>{% endif %}
+          {% if block.settings.show_whatsapp %}
+            {% assign share_text = article.title | append: ' ' | append: canonical_article_url %}
+            <a class="ai-journal-nav-{{ ai_gen_id }}__action" href="https://wa.me/?text={{ share_text | url_encode }}" target="_blank" rel="noopener noreferrer">{{ block.settings.whatsapp_label | escape }}</a>
+          {% endif %}
+        </span>
+        <span class="ai-journal-nav-{{ ai_gen_id }}__feedback" aria-live="polite" aria-atomic="true" data-feedback></span>
+      </div>
+    </nav>
+  {% endif %}
+</journal-share-{{ ai_gen_id }}>
+
+<script>
+  (() => {
+    const tagName = 'journal-share-{{ ai_gen_id }}';
+    if (customElements.get(tagName)) return;
+    class JournalShare extends HTMLElement {
+      connectedCallback() {
+        if (this._onClick) this.removeEventListener('click', this._onClick);
+        this._onClick = async (event) => {
+          const button = event.target.closest('[data-copy]');
+          if (!button || !this.contains(button)) return;
+          const feedback = this.querySelector('[data-feedback]');
+          const text = this.dataset.copySuccess;
+          const url = this.dataset.articleUrl;
+          let copied = false;
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(url);
+              copied = true;
+            } else {
+              const field = document.createElement('textarea');
+              field.value = url;
+              field.setAttribute('readonly', '');
+              field.style.position = 'fixed';
+              field.style.opacity = '0';
+              this.appendChild(field);
+              field.select();
+              copied = document.execCommand('copy');
+              field.remove();
+            }
+          } catch (error) {
+            copied = false;
+          }
+          feedback.textContent = copied ? text : this.dataset.copyFailure;
+        };
+        this.addEventListener('click', this._onClick);
+      }
+      disconnectedCallback() {
+        if (this._onClick) this.removeEventListener('click', this._onClick);
+      }
+    }
+    customElements.define(tagName, JournalShare);
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Journal nav and share",
+  "settings": [
+    { "type": "header", "content": "Labels" },
+    { "type": "text", "id": "back_label", "label": "Back label", "default": "« Back to journal" },
+    { "type": "text", "id": "share_label", "label": "Share label", "default": "Share" },
+    { "type": "text", "id": "copy_label", "label": "Copy link label", "default": "Copy link" },
+    { "type": "text", "id": "whatsapp_label", "label": "WhatsApp label", "default": "WhatsApp" },
+    { "type": "text", "id": "copy_success", "label": "Copy success message", "default": "Link copied" },
+    { "type": "text", "id": "copy_failure", "label": "Copy failure message", "default": "Could not copy link" },
+    { "type": "checkbox", "id": "show_copy", "label": "Show copy link", "default": true },
+    { "type": "checkbox", "id": "show_whatsapp", "label": "Show WhatsApp", "default": true },
+    { "type": "header", "content": "Appearance" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#FFFFFF" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#06149B" },
+    { "type": "color", "id": "border_color", "label": "Border", "default": "#8588B0" },
+    { "type": "range", "id": "border_width", "label": "Border thickness", "min": 0, "max": 4, "step": 1, "unit": "px", "default": 1 },
+    { "type": "font_picker", "id": "font_family", "label": "Font", "default": "anonymous_pro_n4" },
+    { "type": "range", "id": "font_size_desktop", "label": "Desktop font size", "min": 10, "max": 20, "step": 1, "unit": "px", "default": 12 },
+    { "type": "range", "id": "font_size_mobile", "label": "Mobile font size", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 12 },
+    { "type": "range", "id": "padding_vertical", "label": "Vertical padding", "min": 8, "max": 40, "step": 2, "unit": "px", "default": 18 },
+    { "type": "range", "id": "padding_horizontal", "label": "Horizontal padding", "min": 8, "max": 40, "step": 2, "unit": "px", "default": 16 },
+    { "type": "range", "id": "max_width", "label": "Maximum width", "min": 400, "max": 1600, "step": 100, "unit": "px", "default": 1200 },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 }
+  ],
+  "presets": [{ "name": "Journal nav and share" }],
+  "tag": null,
+  "class": "journal-nav-share-block"
+}
 {% endschema %}
