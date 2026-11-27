@@ -431,6 +431,128 @@
         "padding-block-start": 20,
         "padding-block-end": 0
       }
+    },
+    "section_3dqh4e": {
+      "type": "section",
+      "blocks": {
+        "text_w6Ak7i": {
+          "type": "text",
+          "name": "t:names.heading",
+          "settings": {
+            "text": "<p>== NEVER MISS A STORY ==</p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "#ffffff",
+            "background": true,
+            "background_color": "#061b4a",
+            "corner_radius": 0,
+            "padding-block-start": 8,
+            "padding-block-end": 8,
+            "padding-inline-start": 16,
+            "padding-inline-end": 16
+          },
+          "blocks": {}
+        },
+        "text_DT3yy8": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "paragraph",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "email_signup_xXEXPx": {
+          "type": "email-signup",
+          "settings": {
+            "width": "fill",
+            "custom_width": 50,
+            "heading": "FRESH STORIES. STRAIGHT TO YOUR INBOX.",
+            "heading_text_color": "#061b4a",
+            "heading_preset": "h4",
+            "border_style": "all",
+            "input_style": "custom",
+            "border_width": 1,
+            "border_radius": 0,
+            "input_background_color": "#ffffff",
+            "input_text_color": "#151515",
+            "input_border_color": "#999999",
+            "input_type_preset": "paragraph",
+            "style_class": "button-custom",
+            "custom_button_background": "#ea080c",
+            "custom_button_text": "#ffffff",
+            "custom_button_border": "#ea080c",
+            "link_text_color": "",
+            "display_type": "text",
+            "label": "SUBSCRIBE!",
+            "integrated_button": false,
+            "button_type_preset": "paragraph",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_w6Ak7i",
+        "text_DT3yy8",
+        "email_signup_xXEXPx"
+      ],
+      "name": "t:names.email_signup",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "full-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "#ffffff",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "solid",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "#d0d0d0",
+        "border_radius": 0,
+        "padding-block-start": 20,
+        "padding-block-end": 20
+      }
     }
   },
   "order": [
@@ -440,6 +562,7 @@
     "hero_pdNkbe",
     "17957646044eef6f5f",
     "1795776486f72f8a74",
-    "blocks_33EQTB"
+    "blocks_33EQTB",
+    "section_3dqh4e"
   ]
 }
