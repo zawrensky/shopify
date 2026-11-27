@@ -65,7 +65,7 @@
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
 {% style %}
-.ai-editorial-{{ ai_gen_id }}{display:block;width:100%;max-width:100%;box-sizing:border-box;color:{{ block.settings.text_color }};background:{{ block.settings.background_color }};padding:{{ block.settings.padding }}px}
+.ai-editorial-{{ ai_gen_id }}{display:block;width:100%;max-width:100%;box-sizing:border-box;color:{{ block.settings.text_color }};background:{{ block.settings.background_color }};padding:{{ block.settings.padding }}px; border: 1px solid {{ block.settings.border_color }} }
 .ai-editorial-{{ ai_gen_id }} *, .ai-editorial-{{ ai_gen_id }} *::before, .ai-editorial-{{ ai_gen_id }} *::after{box-sizing:border-box}
 .ai-editorial-{{ ai_gen_id }}__layout{width:{{ block.settings.desktop_width_percent }}%;max-width:100%;margin:0 auto;display:grid;grid-template-columns:minmax(0,68fr) minmax(0,{{ block.settings.sidebar_width }}fr);gap:{{ block.settings.column_gap }}px;align-items:start}
 .ai-editorial-{{ ai_gen_id }}__article{min-width:0;font-size:{{ block.settings.font_size }}px;line-height:1.75;overflow-wrap:anywhere}
