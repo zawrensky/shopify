@@ -367,6 +367,70 @@
         "padding-block-start": 20,
         "padding-block-end": 0
       }
+    },
+    "blocks_33EQTB": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_7b804fc_pEfwJF": {
+          "type": "ai_gen_block_7b804fc",
+          "settings": {
+            "header_title": "FROM THE JOURNAL",
+            "header_background": "#102A4C",
+            "header_text_color": "#FFFFFF",
+            "view_all_text": "VIEW ALL >>",
+            "view_all_url": "",
+            "view_all_color": "#FFFFFF",
+            "blog_source": "journal",
+            "article_count": 3,
+            "desktop_columns": 3,
+            "image_height": 90,
+            "article_gap": 18,
+            "read_more_text": "» Read More",
+            "read_more_fontsize": 12,
+            "card_background": "#FFFFFF",
+            "card_border": "#DFDFDF",
+            "article_title_color": "#102A4C",
+            "article_title_fontsize": 12,
+            "read_more_color": "#164E8A",
+            "desktop_width_percent": 100,
+            "show_excerpt": "No",
+            "show_pagination": "No"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_7b804fc_pEfwJF"
+      ],
+      "name": "News article grid",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
@@ -375,6 +439,7 @@
     "17956992153a67764c",
     "hero_pdNkbe",
     "17957646044eef6f5f",
-    "1795776486f72f8a74"
+    "1795776486f72f8a74",
+    "blocks_33EQTB"
   ]
 }
